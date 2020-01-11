@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
-import { Subscription, Observable, of} from 'rxjs';
-import {map, tap, takeWhile, flatMap, mergeMap} from 'rxjs/operators';
-import * as moment from 'moment';
-import { SimpleTimeSpan, TimeSpan } from './timespan';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { MomentTimeSpan, TimeSpan } from './timespan';
+import { MomentService } from './moment.service';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   durations: TimeSpan[] = [];
   now: number;
 
-  constructor() {
-    this.now = moment.now();
+  constructor(ms: MomentService) {
+    this.now = ms.moment.now();
     this.loginForm = new FormGroup({
       dates: new FormControl(null)
     });
@@ -43,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
 
       const dates: string[] = value.split('-');
-      const ts = new SimpleTimeSpan(dates[0], dates[1]);
+      const ts = new MomentTimeSpan(dates[0], dates[1]);
       this.durations.push(ts);
       this.loginForm.get(this.DATES).setValue(null);
 
