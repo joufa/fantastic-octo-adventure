@@ -1,0 +1,30 @@
+<mat-toolbar color="primary">My App</mat-toolbar>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <mat-card>
+      <form [formGroup]="loginForm">
+        <mat-form-field class="input-field">
+          <input matInput formControlName="dates" autofocus>
+        </mat-form-field>
+      </form>
+    </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <mat-card class="input-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{now | date}}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let span of durations">
+            <app-time-span [span]="span"></app-time-span>
+          </div>
+        </mat-card-content>
+    </mat-card>
+    </div>
+  </div>
+</div>
