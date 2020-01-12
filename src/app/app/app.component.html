@@ -16,12 +16,13 @@
       <mat-card class="input-card">
         <mat-card-header>
           <mat-card-title>
-            {{now | date}}
+            <span>{{now | date}} </span>
+            <span *ngIf="duration$ | async">({{duration$ | async | timeSpan}})</span>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div *ngFor="let span of durations">
-            <app-time-span [span]="span"></app-time-span>
+         <div *ngFor="let item of data$ | async">
+            <app-time-span [span]="item"></app-time-span>
           </div>
         </mat-card-content>
     </mat-card>

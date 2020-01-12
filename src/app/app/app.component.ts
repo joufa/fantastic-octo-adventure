@@ -1,11 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { MomentTimeSpan, TimeSpan } from './timespan';
 import { MomentService } from './moment.service';
+import { TimeCollection } from './timespan.collection';
+
 
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -15,11 +18,17 @@ export class AppComponent implements OnInit, OnDestroy {
   readonly DATES = 'dates';
   loginForm: FormGroup;
   sub: Subscription;
-  durations: TimeSpan[] = [];
   now: number;
+  collection: TimeCollection<TimeSpan>;
+
+  data$: Observable<TimeSpan[]>;
+  duration$: Observable<string>;
 
   constructor(ms: MomentService) {
     this.now = ms.moment.now();
+    this.collection = new TimeCollection<MomentTimeSpan>();
+    this.data$ = this.collection.asObservable();
+    this.duration$ = this.collection.durationObservable();
     this.loginForm = new FormGroup({
       dates: new FormControl(null)
     });
@@ -43,14 +52,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
       const dates: string[] = value.split('-');
       const ts = new MomentTimeSpan(dates[0], dates[1]);
-      this.durations.push(ts);
+      this.collection.insert(ts);
       this.loginForm.get(this.DATES).setValue(null);
 
     } catch (error) {
       console.error(error);
     }
   }
-
-
 
 }

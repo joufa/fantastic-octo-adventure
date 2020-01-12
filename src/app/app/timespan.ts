@@ -1,11 +1,13 @@
 import { MomentService, DateTimeService } from './moment.service';
 import { Time } from '@angular/common';
+import { renderFlagCheckIfStmt } from '@angular/compiler/src/render3/view/template';
 
 export interface TimeSpan {
   /**
    * ISO_8601 Time Interval
    */
-  duration(): string;
+  durationAsString(): string;
+  duration(): number;
   getStart(): any;
   getEnd(): any;
   conflicts(t: TimeSpan): boolean;
@@ -32,8 +34,12 @@ export class MomentTimeSpan implements TimeSpan {
     }
   }
 
-  duration(): string {
+  durationAsString(): string {
     return this.span().toJSON();
+  }
+
+  duration(): number {
+    return this.span();
   }
 
   getStart() {
@@ -58,7 +64,6 @@ export class MomentTimeSpan implements TimeSpan {
   isAfter(t: TimeSpan): boolean {
     return this.end.isAfter(t.getStart());
   }
-
   isBefore(t: TimeSpan): boolean {
     return this.end.isBefore(t.getStart());
   }

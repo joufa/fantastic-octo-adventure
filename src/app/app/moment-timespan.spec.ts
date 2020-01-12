@@ -7,7 +7,7 @@ describe('Moment timespan', () => {
     const item = new MomentTimeSpan('8.00', '11.00');
 
     expect(item).toBeTruthy();
-    expect(item.duration()).toBe('PT3H');
+    expect(item.durationAsString()).toBe('PT3H');
   });
 
   it('should be comparable', () => {

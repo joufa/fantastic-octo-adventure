@@ -22,7 +22,7 @@ export class TimeSpanComponent {
   }
 
   get duration() {
-    return this.span.duration();
+    return this.span.durationAsString();
   }
 
 }
