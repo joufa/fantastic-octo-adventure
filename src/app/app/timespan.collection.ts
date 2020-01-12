@@ -1,4 +1,4 @@
-import { TimeSpan } from './timespan';
+import { TimeSpan, MomentTimeSpan } from './timespan';
 
 export interface ICollection<T> {
   getAll(): T[];
@@ -11,38 +11,78 @@ export interface ICollection<T> {
 export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
   private head: Node<T>;
   private tail: Node<T>;
-  private data: Node<T>[];
-
-  constructor() {
-    this.data = [];
-  }
+  private size = 0;
 
   getAll(): T[] {
     const items: T[] = [];
-    this.data.forEach(item => items.push(item.data));
+    let n = this.head;
+    while (n) {
+      items.push(n.data);
+      n = n.next;
+    }
     return items;
   }
 
   insert(item: T): void {
     const node = {previous: null, next: null, data: item} as Node<T>;
-    if (this.data.length === 0) {
-      this.data.push(node);
+
+    if (this.isEmpty()) {
+      this.head = node;
+      this.tail = node;
+      this.size = 1;
       return;
     }
 
+    if (this.conflicts(node)) {
+      throw new Error('Time conflict');
+    }
+
+    let n = this.head;
+
+    while (n) {
+
+      if (node.data.isBefore(n.data)) {
+
+        n.previous = node;
+        node.next = n;
+        if (n === this.head) {
+          this.head = node;
+        }
+        if (n === this.tail) {
+          this.tail = node;
+        }
+      }
+
+      if (n === this.tail) {
+        n.next = node;
+        node.previous = n;
+        this.tail = node;
+      }
+      n = n.next;
+    }
+    this.size++;
 
   }
   remove(item: T): void {
     throw new Error('Method not implemented.');
   }
   length(): number {
-    return this.data.length;
+    return this.size;
   }
   isEmpty(): boolean {
-    return this.data.length === 0;
+    return this.size === 0;
   }
 
-
+  private conflicts(t: Node<T>): boolean {
+    let node = this.head;
+    while (node) {
+      if (node.data.conflicts(t.data)) {
+        return true;
+      }
+      node = node.next;
+    }
+    return false;
+  }
 }
 
 export interface Node<T extends TimeSpan> {

@@ -1,4 +1,5 @@
 import { MomentService, DateTimeService } from './moment.service';
+import { Time } from '@angular/common';
 
 export interface TimeSpan {
   /**
@@ -7,8 +8,9 @@ export interface TimeSpan {
   duration(): string;
   getStart(): any;
   getEnd(): any;
-  compareTo(t: TimeSpan): number;
   conflicts(t: TimeSpan): boolean;
+  isAfter(t: TimeSpan): boolean;
+  isBefore(t: TimeSpan): boolean;
 }
 
 export class MomentTimeSpan implements TimeSpan {
@@ -34,10 +36,6 @@ export class MomentTimeSpan implements TimeSpan {
     return this.span().toJSON();
   }
 
-  private span(): any {
-    const diff = this.end.diff(this.start);
-    return this.moment.duration(diff);
-  }
   getStart() {
     return this.start;
   }
@@ -46,13 +44,43 @@ export class MomentTimeSpan implements TimeSpan {
   }
 
   compareTo(t: TimeSpan): number {
-   return 1;
+    if (this.start.isAfter(t.getStart())) {
+      return 1;
+    }
+    if (this.start.isBefore(t.getStart())) {
+      return -1;
+    }
+    if (this.start.isSame(t.getStart()) && this.end.isSame(t.getEnd())) {
+      return 0;
+    }
+  }
+
+  isAfter(t: TimeSpan): boolean {
+    return this.end.isAfter(t.getStart());
+  }
+
+  isBefore(t: TimeSpan): boolean {
+    return this.end.isBefore(t.getStart());
   }
 
   conflicts(t: TimeSpan): boolean {
-    const startMoment = this.moment(t.getStart());
+
+    if (this.start.isAfter(t.getEnd())) {
+      return false;
+    }
+    if (t.getStart().isBefore(this.end) || t.getStart().isBefore(this.end)) {
+      return true;
+    }
     return false;
   }
 
+  private span(): any {
+    const diff = this.end.diff(this.start);
+    return this.moment.duration(diff);
+  }
+
+  toString() {
+    return `${this.start} - ${this.end}`;
+  }
 
 }
