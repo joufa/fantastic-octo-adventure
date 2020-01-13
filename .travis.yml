@@ -31,6 +31,6 @@ deploy:
   provider: firebase
   project: "workday-times"
   token:
-    secure: $FIREBASE_TOKEN
+    secure: "FfuM/ptnNmtc61bDCrYKRdNYApL/hTwbvsPPQrnsDFVqUjS9BlwCTvz2aQK2AzuDkJQJYcEPUhpMjCPTWkyEEcPJhbER/fZjuZ6EzUiv9aCW4na9BFIomQIxGgtwy10UEvrYOwSI4NLAjnlEaHEvqzHRvIJOdcbuNN7glPIQEUllELzk/8vUfpN9lNU+reCEawLpZyhSv5m+YnhIS2+NWQq1vww1HmETNU7nZjOw7z4mNgemTmhxVEIhIrRYu1skoUSeMgsgeywMiWKnCM/vpeBpuvtMsOm7dJeVUu77EnyNv603L3sgUchI07qXF2RtEcGftyZaKz5OwUIoA8Rw5dWSacShFWYEmdjlWts6hn70lIseFnh1sML/rQuaRdRbHMS376JowcG+9iP+BSyPbSlnbs4Qz44nCzYT67um6VqEYzaP45Q+gjUuPdCruX8f7zSNR17Q3KkRO0VMBkulWRlL/hq4zZ9W0hFhsE/SUoX5zRt7pBLNPbERsAEk6nM6zxgu2jBk9ps1GkoExR9f2Y5iNrONdgb26Q3lBiwKfiwlXifrtlO1jInJzJSyLlU+P0uuCybkObggkj/PoHaRr2wSPrru51HTvC59AKf2tDVc45NS8KUTzHV/IMfz9FJQ/G+fvz0ioYBAYhn4va7WdAySJ53C9OCTplrph+VPMXo="
   on:
     branch: master
