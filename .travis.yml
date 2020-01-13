@@ -23,11 +23,9 @@ before_script:
   - npm install -g @angular/cli
 
 script:
+  - ng build --prod
   - npx jest
   - ng e2e
-
-after_script:
-  - ng build --prod
 
 deploy:
   provider: firebase
