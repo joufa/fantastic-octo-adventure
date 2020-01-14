@@ -34,4 +34,13 @@ describe('Moment timespan', () => {
     expect(fifth.conflicts(fourth)).toBeFalsy();
   });
 
+  it ('should handle equality', () => {
+    const first = new MomentTimeSpan('8.00', '11.00');
+    const second = new MomentTimeSpan('8.00', '11.00');
+    const third = new MomentTimeSpan('8.00', '12.00');
+
+    expect(first.isSame(second)).toBeTruthy();
+    expect(first.isSame(third)).toBeFalsy();
+  });
+
 });

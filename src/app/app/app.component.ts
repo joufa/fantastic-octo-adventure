@@ -15,6 +15,7 @@ import { TimeCollection } from './timespan.collection';
 export class AppComponent implements OnInit, OnDestroy {
 
   exp = new RegExp('^([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
+  deleteExp = new RegExp('^d ([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
   readonly DATES = 'dates';
   loginForm: FormGroup;
   sub: Subscription;
@@ -44,20 +45,40 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  handleValue(value: string) {
-    if (!this.exp.test(value)) {
-      return;
-    }
+  remove(t: TimeSpan) {
     try {
-
-      const dates: string[] = value.split('-');
-      const ts = new MomentTimeSpan(dates[0], dates[1]);
-      this.collection.insert(ts);
-      this.loginForm.get(this.DATES).setValue(null);
-
-    } catch (error) {
+      this.collection.remove(t);
+    } catch (error) {
       console.error(error);
     }
+  }
+
+  handleValue(value: string) {
+    if (this.exp.test(value)) {
+      try {
+        const ts = this.createTimeSpan(value);
+        this.collection.insert(ts);
+        this.loginForm.get(this.DATES).setValue(null);
+
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (this.deleteExp.test(value)) {
+      try {
+      const ts = this.createTimeSpan(value.substr(2, value.length));
+      this.collection.remove(ts);
+      this.loginForm.get(this.DATES).setValue(null);
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+
+  }
+
+  createTimeSpan(expr: string): TimeSpan {
+    const dates: string[] = expr.split('-');
+    return new MomentTimeSpan(dates[0], dates[1]);
   }
 
 }

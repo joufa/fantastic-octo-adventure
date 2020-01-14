@@ -13,6 +13,7 @@ export interface TimeSpan {
   conflicts(t: TimeSpan): boolean;
   isAfter(t: TimeSpan): boolean;
   isBefore(t: TimeSpan): boolean;
+  isSame(t: TimeSpan): boolean;
 }
 
 export class MomentTimeSpan implements TimeSpan {
@@ -77,6 +78,9 @@ export class MomentTimeSpan implements TimeSpan {
       return true;
     }
     return false;
+  }
+  isSame(t: TimeSpan): boolean {
+    return this.start.isSame(t.getStart()) && this.end.isSame(t.getEnd());
   }
 
   private span(): any {

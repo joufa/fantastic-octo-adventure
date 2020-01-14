@@ -1,5 +1,6 @@
 import { MomentTimeSpan } from './timespan';
 import { TimeCollection } from './timespan.collection';
+import { findStaticQueryIds } from '@angular/compiler';
 
 const func = () => {
   throw new Error('Custom error');
@@ -41,6 +42,27 @@ describe('TimeSpanCollection', () => {
     expect(() => {
       collection.insert(conflicting);
     }).toThrow();
+
+  });
+
+  it('should remove items', () => {
+    const collection = new TimeCollection<MomentTimeSpan>();
+    const first = new MomentTimeSpan('8.30', '9.00');
+    const second = new MomentTimeSpan('11.00', '12.00');
+    const third = new MomentTimeSpan('9.45', '10.59');
+    const gigu = new MomentTimeSpan('9.01', '09.40');
+
+    collection.insert(second);
+    collection.insert(first);
+    collection.insert(third);
+    collection.insert(gigu);
+    collection.remove(first);
+    collection.remove(second);
+    collection.remove(gigu);
+    expect(() => collection.remove(gigu)).toThrow();
+    collection.remove(third);
+    expect(collection.isEmpty()).toBeTruthy();
+    collection.remove(gigu);
 
   });
 });

@@ -23,7 +23,7 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
 
 
   asObservable(): Observable<T[]> {
-   return this.bs.asObservable();
+    return this.bs.asObservable();
   }
 
   durationObservable(): Observable<string> {
@@ -51,7 +51,7 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
   }
 
   insert(item: T): void {
-    const node = {previous: null, next: null, data: item} as Node<T>;
+    const node = { previous: null, next: null, data: item } as Node<T>;
 
     if (this.isEmpty()) {
       this.head = node;
@@ -99,7 +99,52 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
   }
 
   remove(item: T): void {
-    throw new Error('Method not implemented.');
+
+    if (this.isEmpty()) {
+      return;
+    }
+
+    if (this.head.data.isSame(item)) {
+      if (this.head.next) {
+        this.head = this.head.next;
+      } else {
+        this.head = null;
+        this.tail = null;
+      }
+      this.size--;
+      this.next();
+      return;
+    }
+
+    if (this.tail.data.isSame(item)) {
+      this.tail.previous.next = null;
+      this.tail = this.tail.previous;
+      this.size--;
+      this.next();
+      return;
+    }
+
+    let current = this.head.next;
+    while (current) {
+      if (current.data.isSame(item)) {
+        current.previous.next = current.next;
+        current.next.previous = current.previous;
+        if (this.tail === current) {
+          this.tail = current.previous;
+        }
+        break;
+
+      }
+      current = current.next;
+    }
+
+    if (current === null) {
+      // Not found in list
+      throw new Error('Item does not exist');
+    }
+    this.size--;
+    this.next();
+
   }
   length(): number {
     return this.size;
@@ -130,6 +175,29 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
   private next(): void {
     this.bs.next(this.getAll());
     this.durationBs.next(this.getDurationAsString());
+  }
+
+  debug() {
+    let s = '| Collection debug view\r\n';
+    s = s + `| Length: ${this.length()}, IsEmpty: ${this.isEmpty()}\r\n`;
+    s = s + `| Head set: ${this.head !== null}, Tail set: ${this.tail !== null}\r\n`;
+    let i = 1;
+    if (this.length() === 0) {
+      console.log(s);
+      return;
+    }
+    this.getAll().forEach(item => {
+      s = s + `| ${i}: ${item.toString()} `;
+      if (this.head && this.head.data.isSame(item)) {
+        s = s + 'H* ';
+      }
+      if (this.tail && this.tail.data.isSame(item)) {
+        s = s + 'T* ';
+      }
+      s = s + '\r\n';
+      i++;
+    });
+    console.log(s);
   }
 }
 

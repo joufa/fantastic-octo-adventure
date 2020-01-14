@@ -10,7 +10,12 @@ describe('workspace-project App', () => {
 
   it('should display app title', () => {
     page.navigateTo();
-    expect(page.getTitle()).toEqual('My App');
+    expect(page.getTitle()).toEqual('Workday App');
+  });
+
+  it('should accept input', () => {
+    page.navigateTo();
+    page.sendKeysToInput('moi');
   });
 
   afterEach(async () => {
