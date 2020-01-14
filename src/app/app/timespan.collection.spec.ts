@@ -6,14 +6,16 @@ const func = () => {
   throw new Error('Custom error');
 };
 
+const now = new Date();
+
 describe('TimeSpanCollection', () => {
   it('should initialize', () => {
-    const collection = new TimeCollection<MomentTimeSpan>();
+    const collection = new TimeCollection<MomentTimeSpan>(now);
     expect(collection).toBeTruthy();
   });
 
   it('should insert items in order', () => {
-    const collection = new TimeCollection<MomentTimeSpan>();
+    const collection = new TimeCollection<MomentTimeSpan>(now);
 
     const first = new MomentTimeSpan('8.30', '9.00');
     const second = new MomentTimeSpan('11.00', '12.00');
@@ -32,7 +34,7 @@ describe('TimeSpanCollection', () => {
   });
 
   it('should throw error when adding conflicting span', () => {
-    const collection = new TimeCollection<MomentTimeSpan>();
+    const collection = new TimeCollection<MomentTimeSpan>(now);
     expect(collection.isEmpty()).toBeTruthy();
     const first = new MomentTimeSpan('07.00', '09.00');
     const conflicting = new MomentTimeSpan('08.40', '11.00');
@@ -46,7 +48,7 @@ describe('TimeSpanCollection', () => {
   });
 
   it('should remove items', () => {
-    const collection = new TimeCollection<MomentTimeSpan>();
+    const collection = new TimeCollection<MomentTimeSpan>(now);
     const first = new MomentTimeSpan('8.30', '9.00');
     const second = new MomentTimeSpan('11.00', '12.00');
     const third = new MomentTimeSpan('9.45', '10.59');

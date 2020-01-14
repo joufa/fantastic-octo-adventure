@@ -9,10 +9,6 @@ import { TimeSpanComponent } from './app/time-span/time-span.component';
 import { TimeSpanPipe } from './time-span.pipe';
 import { SimpleDatePipe } from './simple-date.pipe';
 import { MaterialModule } from './material';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { environment } from '../environments/environment';
-
-const logLevel: NgxLoggerLevel = environment.production ? NgxLoggerLevel.ERROR : NgxLoggerLevel.DEBUG;
 
 @NgModule({
   declarations: [
@@ -26,7 +22,6 @@ const logLevel: NgxLoggerLevel = environment.production ? NgxLoggerLevel.ERROR :
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
-    LoggerModule.forRoot({level: logLevel})
   ],
   providers: [],
   bootstrap: [AppComponent]

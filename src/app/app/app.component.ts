@@ -4,7 +4,8 @@ import { Subscription, Observable } from 'rxjs';
 import { MomentTimeSpan, TimeSpan } from './timespan';
 import { MomentService } from './moment.service';
 import { TimeCollection } from './timespan.collection';
-
+import { TimeRepository } from '../repo/repo.model';
+import { LocalStorageRepository } from '../repo/timespan.repo';
 
 @Component({
   selector: 'app-root',
@@ -21,13 +22,24 @@ export class AppComponent implements OnInit, OnDestroy {
   sub: Subscription;
   now: number;
   collection: TimeCollection<TimeSpan>;
+  repo: TimeRepository<TimeCollection<TimeSpan>>;
 
   data$: Observable<TimeSpan[]>;
   duration$: Observable<string>;
 
   constructor(ms: MomentService) {
     this.now = ms.moment.now();
-    this.collection = new TimeCollection<MomentTimeSpan>();
+    this.repo = new LocalStorageRepository();
+    const data: TimeCollection<TimeSpan> = this.repo.load();
+
+    if (!data || !this.isSameDay(data.day(), new Date(this.now))) {
+      // new instance
+      this.collection = new TimeCollection<MomentTimeSpan>(new Date());
+      this.repo.save(this.collection);
+    } else {
+      this.collection = data;
+    }
+
     this.data$ = this.collection.asObservable();
     this.duration$ = this.collection.durationObservable();
     this.loginForm = new FormGroup({
@@ -48,28 +60,33 @@ export class AppComponent implements OnInit, OnDestroy {
   remove(t: TimeSpan) {
     try {
       this.collection.remove(t);
+      this.repo.save(this.collection);
     } catch (error) {
       console.error(error);
     }
+  }
+  add(t: TimeSpan) {
+    this.collection.insert(t);
+    this.repo.save(this.collection);
   }
 
   handleValue(value: string) {
     if (this.exp.test(value)) {
       try {
         const ts = this.createTimeSpan(value);
-        this.collection.insert(ts);
+        this.add(ts);
         this.loginForm.get(this.DATES).setValue(null);
 
-      } catch (error) {
+      } catch (error) {
         console.error(error);
       }
     } else if (this.deleteExp.test(value)) {
       try {
-      const ts = this.createTimeSpan(value.substr(2, value.length));
-      this.collection.remove(ts);
-      this.loginForm.get(this.DATES).setValue(null);
+        const ts = this.createTimeSpan(value.substr(2, value.length));
+        this.remove(ts);
+        this.loginForm.get(this.DATES).setValue(null);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
 
     }
@@ -79,6 +96,10 @@ export class AppComponent implements OnInit, OnDestroy {
   createTimeSpan(expr: string): TimeSpan {
     const dates: string[] = expr.split('-');
     return new MomentTimeSpan(dates[0], dates[1]);
+  }
+
+  isSameDay(first: Date, second: Date): boolean {
+    return new Date(first).getDay() === new Date(second).getDay();
   }
 
 }

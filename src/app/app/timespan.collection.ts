@@ -1,26 +1,37 @@
 import { TimeSpan } from './timespan';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { MomentService } from './moment.service';
+import { ICollection } from './ICollection';
 
-export interface ICollection<T> {
-  getAll(): T[];
-  insert(item: T): void;
-  remove(item: T): void;
-  length(): number;
-  isEmpty(): boolean;
+export interface ITimeCollection {
+  day(): Date;
   getDurationAsString(): string;
 }
 
-export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
+export interface ObservableCollection<T> {
+  asObservable(): Observable<T[]>;
+}
+
+export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITimeCollection, ObservableCollection<T> {
+
+  constructor(day: Date) {
+    if (!day) {
+      throw new Error('Day cannot be null');
+    }
+
+    this.initDay = day;
+  }
 
   private head: Node<T>;
   private tail: Node<T>;
   private size = 0;
+  // TODO
   private moment = new MomentService().get();
 
   private bs = new BehaviorSubject<T[]>(this.getAll());
   private durationBs = new BehaviorSubject<string>('');
 
+  private readonly initDay: Date;
 
   asObservable(): Observable<T[]> {
     return this.bs.asObservable();
@@ -28,6 +39,10 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
 
   durationObservable(): Observable<string> {
     return this.durationBs.asObservable();
+  }
+
+  day() {
+    return this.initDay;
   }
 
   getAll(): T[] {
@@ -200,7 +215,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T> {
     console.log(s);
   }
 }
-
 export interface Node<T extends TimeSpan> {
   previous: Node<T>;
   next: Node<T>;
