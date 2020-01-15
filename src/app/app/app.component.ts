@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   clearSubject: Subject<void> = new Subject<void>();
 
-  constructor(private ms: MomentService, private service: TimespanService, private int: TimeInterpreterService) {
+  constructor(private service: TimespanService, private int: TimeInterpreterService) {
   }
 
   ngOnInit(): void {

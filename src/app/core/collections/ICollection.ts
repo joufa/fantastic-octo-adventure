@@ -4,4 +4,6 @@ export interface ICollection<T> {
   remove(item: T): void;
   length(): number;
   isEmpty(): boolean;
+  getFirst(): T;
+  getLast(): T;
 }

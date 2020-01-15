@@ -10,6 +10,7 @@ import { Subscription, Observable } from 'rxjs';
         <mat-card>
           <form [formGroup]="loginForm">
             <mat-form-field class="input-field">
+              <mat-icon matPrefix class="input-icon">access_time</mat-icon>
               <input id="intepreter" matInput formControlName="dates" autofocus>
             </mat-form-field>
           </form>
@@ -17,7 +18,7 @@ import { Subscription, Observable } from 'rxjs';
       </div>
     </div>
   `,
-  styles: ['.input-field {width: 100%;}']
+  styles: ['.input-field {width: 100%;} .input-icon {vertical-align: bottom; margin-right: 5px}']
 })
 export class TimeInputComponent implements OnInit, OnDestroy {
 

@@ -10,12 +10,14 @@ import { TimeSpanComponent } from './app/time-span/time-span.component';
 import { MaterialModule } from './material';
 import { TimeInputComponent } from './app/time-input/time-input.component';
 import { PipesModule } from './pipes';
+import { ContextComponent } from './app/context/context.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TimeSpanComponent,
-    TimeInputComponent
+    TimeInputComponent,
+    ContextComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,4 @@
 import { MomentService, DateTimeService } from './moment.service';
-import { Time } from '@angular/common';
-import { renderFlagCheckIfStmt } from '@angular/compiler/src/render3/view/template';
 
 export interface TimeSpan {
   /**

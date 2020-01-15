@@ -10,17 +10,26 @@
     <div class="col-md-12">
       <mat-card class="input-card">
         <mat-card-header>
-          <mat-card-title>
+          <mat-card-title-group>
+            <mat-card-title>
             <span>{{now | async | date}} </span>
             <span *ngIf="duration$ | async">({{duration$ | async | timeSpan}})</span>
-          </mat-card-title>
+            </mat-card-title>
+
+            <mat-card-title>
+             <app-context></app-context>
+            </mat-card-title>
+          </mat-card-title-group>
         </mat-card-header>
+
+
         <mat-card-content>
-         <div *ngFor="let item of data$ | async">
+
+          <div *ngFor="let item of data$ | async">
             <app-time-span [span]="item"></app-time-span>
           </div>
         </mat-card-content>
-    </mat-card>
+      </mat-card>
     </div>
   </div>
 </div>

@@ -143,13 +143,25 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
   }
 
   getDurationAsString(): string {
+    return this.getDuration().toJSON();
+  }
+
+  getDuration(): any {
     let duration = 0;
     const data = this.getAll();
     data.forEach(item => {
       duration = duration + item.duration();
     });
-    return this.moment.duration(duration).toJSON();
+    return this.moment.duration(duration);
   }
+
+  getFirst(): T {
+    return this.head ? this.head.data : null;
+  }
+  getLast(): T {
+    return this.tail ? this.tail.data : null;
+  }
+
 
   private conflicts(t: Node<T>): boolean {
     let node = this.head;
