@@ -11,7 +11,6 @@ describe('Moment timespan', () => {
 
   it('should be comparable', () => {
     const first = new MomentTimeSpan('8.00', '11.00');
-    const firstSame = new MomentTimeSpan('8.00', '11.00');
     const second = new MomentTimeSpan('11.15', '12.00');
 
     expect(first.isBefore(second)).toBeTruthy();

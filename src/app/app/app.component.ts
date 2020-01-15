@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { MomentService } from './moment.service';
 import { TimeSpan } from './timespan';
 import { TimespanService } from './timespan.service';
 import { TimeInterpreterService } from './interpreter';

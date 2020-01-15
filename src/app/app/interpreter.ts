@@ -14,7 +14,6 @@ export class TimeInterpreterService implements Intepreter {
   private exp = new RegExp('^([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
   private deleteExp = new RegExp('^d ([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]-([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
   private startPending = new RegExp('^s ([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
-  private endPending = new RegExp('^e ([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
   private immediateStart = new RegExp('^S$');
   private immediateEnd = new RegExp('^E$');
   constructor(private ts: TimespanService) {}
