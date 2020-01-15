@@ -6,22 +6,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { TimeSpanComponent } from './app/time-span/time-span.component';
-import { TimeSpanPipe } from './time-span.pipe';
-import { SimpleDatePipe } from './simple-date.pipe';
+
 import { MaterialModule } from './material';
+import { TimeInputComponent } from './app/time-input/time-input.component';
+import { PipesModule } from './pipes';
 
 @NgModule({
   declarations: [
     AppComponent,
     TimeSpanComponent,
-    TimeSpanPipe,
-    SimpleDatePipe
+    TimeInputComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
+    PipesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

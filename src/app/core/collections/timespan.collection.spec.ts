@@ -1,4 +1,4 @@
-import { MomentTimeSpan } from './timespan';
+import { MomentTimeSpan } from '../../app/timespan';
 import { TimeCollection } from './timespan.collection';
 import { findStaticQueryIds } from '@angular/compiler';
 

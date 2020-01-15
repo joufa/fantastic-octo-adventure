@@ -45,7 +45,7 @@ export class TimeSpanPipe implements PipeTransform {
 
 }
 
-interface Durations {
+export interface Durations {
   sign: string;
   years: number;
   months: number;

@@ -1,5 +1,5 @@
-import { ITimeCollection } from '../app/timespan.collection';
-import { ICollection } from '../app/ICollection';
+import { ITimeCollection } from '../core/collections/ITimeCollection';
+import { ICollection } from '../core/collections/ICollection';
 
 export interface TimeSpanDto {
   start: string;

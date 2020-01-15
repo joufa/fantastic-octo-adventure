@@ -1,5 +1,4 @@
 import { MomentTimeSpan } from './timespan';
-import { TimeCollection } from './timespan.collection';
 
 describe('Moment timespan', () => {
 

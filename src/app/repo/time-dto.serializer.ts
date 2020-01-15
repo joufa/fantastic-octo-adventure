@@ -1,7 +1,7 @@
 import { MomentService } from '../app/moment.service';
 import { SerializableTimeCollection, TimeSpanDto, TimeCollectionDto } from './repo.model';
 import { TimeSpan, MomentTimeSpan } from '../app/timespan';
-import { TimeCollection } from '../app/timespan.collection';
+import { TimeCollection } from '../core/collections/timespan.collection';
 
 export class TimeDtoSerializer {
 

@@ -1,4 +1,4 @@
-import { TimeCollection } from '../app/timespan.collection';
+import { TimeCollection } from '../core/collections/timespan.collection';
 import { MomentTimeSpan } from '../app/timespan';
 import { TimeDtoSerializer } from './time-dto.serializer';
 

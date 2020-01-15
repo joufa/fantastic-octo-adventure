@@ -1,6 +1,5 @@
 import { SimpleDatePipe } from './simple-date.pipe';
-import { MomentService } from './app/moment.service';
-import { Moment } from 'moment';
+import { MomentService } from '../app/moment.service';
 
 describe('SimpleDatePipe', () => {
   it('should transform moment object to string', () => {

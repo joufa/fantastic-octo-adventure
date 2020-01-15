@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { MomentService } from './app/moment.service';
+import { MomentService } from '../app/moment.service';
 
 @Pipe({
   name: 'simpleDate'
@@ -11,7 +11,7 @@ export class SimpleDatePipe implements PipeTransform {
     this.moment = ms.get();
   }
 
-  transform(value: any): string {
+  transform(value: Date): string {
     return this.moment(value).format('H.mm');
   }
 

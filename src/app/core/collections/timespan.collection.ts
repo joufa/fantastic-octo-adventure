@@ -1,44 +1,23 @@
-import { TimeSpan } from './timespan';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { MomentService } from './moment.service';
+import { TimeSpan } from '../../app/timespan';
+import { MomentService } from '../../app/moment.service';
 import { ICollection } from './ICollection';
+import { ITimeCollection } from './ITimeCollection';
+import { Node } from './Node';
 
-export interface ITimeCollection {
-  day(): Date;
-  getDurationAsString(): string;
-}
+export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITimeCollection {
 
-export interface ObservableCollection<T> {
-  asObservable(): Observable<T[]>;
-}
-
-export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITimeCollection, ObservableCollection<T> {
-
-  constructor(day: Date) {
-    if (!day) {
-      throw new Error('Day cannot be null');
-    }
-
-    this.initDay = day;
-  }
-
+  private readonly initDay: Date;
   private head: Node<T>;
   private tail: Node<T>;
   private size = 0;
   // TODO
   private moment = new MomentService().get();
 
-  private bs = new BehaviorSubject<T[]>(this.getAll());
-  private durationBs = new BehaviorSubject<string>('');
-
-  private readonly initDay: Date;
-
-  asObservable(): Observable<T[]> {
-    return this.bs.asObservable();
-  }
-
-  durationObservable(): Observable<string> {
-    return this.durationBs.asObservable();
+  constructor(day: Date) {
+    if (!day) {
+      throw new Error('Day cannot be null');
+    }
+    this.initDay = day;
   }
 
   day() {
@@ -72,7 +51,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
       this.head = node;
       this.tail = node;
       this.size = 1;
-      this.next();
       return;
     }
 
@@ -110,7 +88,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
     }
 
     this.size++;
-    this.next();
   }
 
   remove(item: T): void {
@@ -127,7 +104,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
         this.tail = null;
       }
       this.size--;
-      this.next();
       return;
     }
 
@@ -135,7 +111,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
       this.tail.previous.next = null;
       this.tail = this.tail.previous;
       this.size--;
-      this.next();
       return;
     }
 
@@ -158,7 +133,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
       throw new Error('Item does not exist');
     }
     this.size--;
-    this.next();
 
   }
   length(): number {
@@ -187,10 +161,6 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
     }
     return false;
   }
-  private next(): void {
-    this.bs.next(this.getAll());
-    this.durationBs.next(this.getDurationAsString());
-  }
 
   debug() {
     let s = '| Collection debug view\r\n';
@@ -214,9 +184,4 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
     });
     console.log(s);
   }
-}
-export interface Node<T extends TimeSpan> {
-  previous: Node<T>;
-  next: Node<T>;
-  data: T;
 }

@@ -1,8 +1,12 @@
-import { TimeCollection } from '../app/timespan.collection';
 import { TimeSpan } from '../app/timespan';
-import { TimeCollectionDto, SerializableTimeCollection, TimeRepository } from './repo.model';
+import { TimeCollection } from '../core/collections/timespan.collection';
+import { TimeCollectionDto, TimeRepository } from './repo.model';
 import { TimeDtoSerializer } from './time-dto.serializer';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class LocalStorageRepository implements TimeRepository<TimeCollection<TimeSpan>> {
 
   readonly PREFIX: string;
@@ -35,7 +39,3 @@ export class LocalStorageRepository implements TimeRepository<TimeCollection<Tim
   }
 
 }
-
-
-
-

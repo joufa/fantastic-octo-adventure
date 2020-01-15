@@ -4,8 +4,11 @@ import { MomentService } from './moment.service';
 import { MaterialModule } from '../material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TimeSpanComponent } from './time-span/time-span.component';
-import { SimpleDatePipe } from '../simple-date.pipe';
-import { TimeSpanPipe } from '../time-span.pipe';
+import { PipesModule } from '../pipes';
+import { Subject } from 'rxjs';
+import { TimeInputComponent } from './time-input/time-input.component';
+import { TimespanService } from './timespan.service';
+import { TimeInterpreterService } from './interpreter';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -13,14 +16,14 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         TimeSpanComponent,
-        SimpleDatePipe,
-        TimeSpanPipe
+        TimeInputComponent
       ],
       imports: [
         MaterialModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PipesModule
       ],
-      providers: [MomentService]
+      providers: [MomentService, TimespanService, TimeInterpreterService]
     },
     ).compileComponents();
   },
@@ -29,6 +32,7 @@ describe('AppComponent', () => {
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
+    app.clearSubject = new Subject<void>();
     expect(app).toBeTruthy();
   });
 

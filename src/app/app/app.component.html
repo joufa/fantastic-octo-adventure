@@ -4,23 +4,14 @@
   </span>
 </mat-toolbar>
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <mat-card>
-      <form [formGroup]="loginForm">
-        <mat-form-field class="input-field">
-          <input id="intepreter" matInput formControlName="dates" autofocus>
-        </mat-form-field>
-      </form>
-    </mat-card>
-    </div>
-  </div>
+  <app-time-input [clear]="clearSubject.asObservable()" (text)="handleValue($event)"></app-time-input>
+
   <div class="row">
     <div class="col-md-12">
       <mat-card class="input-card">
         <mat-card-header>
           <mat-card-title>
-            <span>{{now | date}} </span>
+            <span>{{now | async | date}} </span>
             <span *ngIf="duration$ | async">({{duration$ | async | timeSpan}})</span>
           </mat-card-title>
         </mat-card-header>
