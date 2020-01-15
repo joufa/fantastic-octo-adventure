@@ -16,6 +16,7 @@ export class TimeInterpreterService implements Intepreter {
   private startPending = new RegExp('^s ([0-9]|0[0-9]|1[0-9]|2[0-3]).[0-5][0-9]$');
   private immediateStart = new RegExp('^S$');
   private immediateEnd = new RegExp('^E$');
+  private deleteAll = new RegExp('^d all$');
   constructor(private ts: TimespanService) {}
 
   handle(text: string): boolean {
@@ -44,6 +45,10 @@ export class TimeInterpreterService implements Intepreter {
     // Start immediate pending
     if (this.immediateStart.test(text)) {
       this.ts.startPending(null);
+      return true;
+    }
+    if (this.deleteAll.test(text)) {
+      this.ts.clear();
       return true;
     }
     return false;

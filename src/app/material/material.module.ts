@@ -5,6 +5,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 
 
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
+
 import {MatChipsModule} from '@angular/material/chips';
 
 
@@ -16,7 +19,8 @@ const MODULES = [
   MatToolbarModule,
   MatIconModule,
   MatChipsModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSnackBarModule
   ];
 
 @NgModule({

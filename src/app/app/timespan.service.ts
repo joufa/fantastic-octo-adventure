@@ -4,6 +4,7 @@ import { TimeSpan, MomentTimeSpan } from './timespan';
 import { BehaviorSubject } from 'rxjs';
 import { LocalStorageRepository } from '../repo/timespan.repo';
 import { PendingParams } from './app.model';
+import { NotificationService } from '../core/notifications/notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class TimespanService {
   public collection$ = this.collectionBs.asObservable();
   public pending$ = this.pendingBs.asObservable();
 
-  constructor(private repo: LocalStorageRepository) {
+  constructor(private repo: LocalStorageRepository, private ns: NotificationService) {
     this.init();
   }
 
@@ -35,8 +36,10 @@ export class TimespanService {
       this.collection.insert(t);
       this.repo.save(this.collection);
       this.next();
+      this.ns.default('Time added!');
     } catch (error) {
       console.error(error);
+      this.ns.default('Error :(');
     }
 
   }
@@ -46,8 +49,10 @@ export class TimespanService {
       this.collection.remove(t);
       this.repo.save(this.collection);
       this.next();
+      this.ns.default('Time removed!');
     } catch (error) {
       console.error(error);
+      this.ns.default('Error :(');
     }
   }
 
@@ -69,6 +74,11 @@ export class TimespanService {
     this.addSpan(ts);
     this.pending = {pending: false} as PendingParams;
     this.pendingBs.next(this.pending);
+  }
+
+  clear() {
+    this.collection = new TimeCollection<MomentTimeSpan>(new Date());
+    this.next();
   }
 
 
