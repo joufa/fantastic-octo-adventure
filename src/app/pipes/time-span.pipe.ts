@@ -9,6 +9,11 @@ export class TimeSpanPipe implements PipeTransform {
 
     transform(value: string): string {
 
+    // Empty
+    if (value === 'P0D') {
+      return 'Nothing!';
+    }
+
     if (!this.iso8601DurationRegex.test(value)) {
       return value;
     }
