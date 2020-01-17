@@ -74,6 +74,7 @@ export class TimespanService {
 
   clear() {
     this.collection = new TimeCollection<MomentTimeSpan>(new Date());
+    this.repo.clear();
     this.next();
   }
 
