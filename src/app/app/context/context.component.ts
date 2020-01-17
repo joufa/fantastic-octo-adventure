@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TimeCollection } from 'src/app/core/collections/timespan.collection';
-import { TimeSpan, MomentTimeSpan } from '../timespan';
-import { MomentService } from '../moment.service';
-import { TimespanService } from '../timespan.service';
-import { Subscription, Observable } from 'rxjs';
-import { PendingParams } from '../app.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+
+import { ITimeCollection } from 'src/app/core/domain/model/interfaces/timespan';
+import { MomentTimeSpan } from 'src/app/core/domain/model/moment-timespan';
+import { PendingParams } from 'src/app/core/domain/service/pending.params';
+import { TimespanService } from '../../core/domain/service/timespan.service';
 
 @Component({
   selector: 'app-context',
@@ -12,8 +12,8 @@ import { PendingParams } from '../app.model';
     <mat-chip-list>
       <mat-chip>{{percentage}} %</mat-chip>
       <mat-chip>{{breaks | timeSpan}} breaks</mat-chip>
-      <mat-chip *ngIf="(isPending | async).pending" color="accent">
-        <mat-spinner [diameter]="20" style="margin-right: 5px"></mat-spinner>{{(isPending | async).start}} -
+      <mat-chip *ngIf="(isPending$ | async).pending" color="accent">
+        <mat-spinner [diameter]="20" style="margin-right: 5px"></mat-spinner>{{(isPending$ | async).start}} -
       </mat-chip>
     </mat-chip-list>
   `,
@@ -21,34 +21,34 @@ import { PendingParams } from '../app.model';
 })
 export class ContextComponent implements OnInit, OnDestroy {
 
-  collection: TimeCollection<TimeSpan>;
+  collection: ITimeCollection;
   // TODO: Modifyable
   expectedDuration = 27000;
   currentDuration: number;
-  isPending: Observable<PendingParams>;
-  breakDuration: number;
 
+  isPending$: Observable<PendingParams>;
   collectionSub$: Subscription;
 
-  constructor(private ms: MomentService, private ts: TimespanService) {
-    this.isPending = this.ts.pending$;
+  constructor(private ts: TimespanService) {
+    this.isPending$ = this.ts.pending$;
   }
 
   ngOnInit() {
     this.collectionSub$ = this.ts.collection$.subscribe(collection => this.runChanges(collection));
   }
+
   ngOnDestroy(): void {
     this.collectionSub$.unsubscribe();
   }
 
-  runChanges(collection: any) {
+  runChanges(collection: ITimeCollection) {
     this.collection = collection;
-    this.breaksDuration();
+    this.breakDuration();
     this.timePercentage();
   }
 
   get breaks() {
-    return this.breaksDuration() !== 'P0D' ? this.breaksDuration() : 'No';
+    return this.breakDuration() !== 'P0D' ? this.breakDuration() : 'No';
   }
 
   get percentage() {
@@ -56,24 +56,21 @@ export class ContextComponent implements OnInit, OnDestroy {
   }
 
 
-  breaksDuration(): string {
+  private breakDuration(): string {
     if (!this.collection.isEmpty()) {
-      const start: any = this.collection.getFirst().getStart();
-      const first: string = this.ms.moment(start).format('HH.mm');
-      const last: string = this.ms.moment(this.collection.getLast().getEnd()).format('HH.mm');
-      const ts = new MomentTimeSpan(first, last);
-      const duration = this.ms.moment.duration(ts.duration());
-      const breaks = duration.subtract(this.collection.getDuration());
+      const start: string = this.collection.getFirst().getStart().format('HH.mm');
+      const end: string = this.collection.getLast().getEnd().format('HH.mm');
+      const ts = new MomentTimeSpan(start, end);
+      const breaks = ts.duration().subtract(this.collection.getDuration());
       return breaks.toJSON();
     }
-
     return 'P0D';
   }
 
-  timePercentage(): string {
-    const collectionDuration: number = this.collection.getDuration();
-    const durationAsSeconds = this.ms.moment.duration(collectionDuration).asSeconds();
-    const x = (durationAsSeconds * 100)  / this.expectedDuration;
-    return Math.floor(x) as unknown as string;
+  private timePercentage(): string {
+    const collectionDuration: number = this.collection.getDuration().asSeconds();
+    const percentage = (collectionDuration * 100) / this.expectedDuration;
+    return Math.floor(percentage) as unknown as string;
   }
 }
+

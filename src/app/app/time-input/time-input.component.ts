@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-time-input',
@@ -24,8 +24,8 @@ export class TimeInputComponent implements OnInit, OnDestroy {
 
   private readonly DATES = 'dates';
 
-  private formSub: Subscription;
-  private clearSub: Subscription;
+  private formSubscription$: Subscription;
+  private clearSubscription$: Subscription;
 
   @Input()
   clear: Observable<void>;
@@ -43,11 +43,11 @@ export class TimeInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.formSub = this.loginForm.get(this.DATES).valueChanges.subscribe(value => this.sendText(value));
-    this.clearSub = this.clear.subscribe(() => this.clearInputField());
+    this.formSubscription$ = this.loginForm.get(this.DATES).valueChanges.subscribe(value => this.sendText(value));
+    this.clearSubscription$ = this.clear.subscribe(() => this.clearInputField());
   }
 
-  clearInputField() {
+  clearInputField(): void {
     this.loginForm.get(this.DATES).setValue(null);
   }
 
@@ -56,8 +56,8 @@ export class TimeInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formSub.unsubscribe();
-    this.clearSub.unsubscribe();
+    this.formSubscription$.unsubscribe();
+    this.clearSubscription$.unsubscribe();
   }
 
 }

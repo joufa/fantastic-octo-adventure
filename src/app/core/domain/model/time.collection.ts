@@ -1,21 +1,21 @@
-import { TimeSpan } from '../../app/timespan';
-import { MomentService } from '../../app/moment.service';
-import { ICollection } from './ICollection';
-import { ITimeCollection } from './ITimeCollection';
-import { Node } from './Node';
+import { Node } from './interfaces/node';
+import { ITimeSpan, ITimeCollection } from './interfaces/timespan';
+import * as m from 'moment';
+import { WdError } from '../base/wd-error';
 
-export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITimeCollection {
+/**
+ * TimeCollection represents one day.
+ */
+export class TimeCollection<T extends ITimeSpan> implements ITimeCollection {
 
   private readonly initDay: Date;
   private head: Node<T>;
   private tail: Node<T>;
   private size = 0;
-  // TODO
-  private moment = new MomentService().get();
 
   constructor(day: Date) {
     if (!day) {
-      throw new Error('Day cannot be null');
+      throw new WdError('Day cannot be null!');
     }
     this.initDay = day;
   }
@@ -56,7 +56,7 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
 
     // TODO: Refactor this
     if (this.conflicts(node)) {
-      throw new Error('Time conflict');
+      throw new WdError('Time conflict!');
     }
 
     if (node.data.isBefore(this.head.data)) {
@@ -130,7 +130,7 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
 
     if (current === null) {
       // Not found in list
-      throw new Error('Item does not exist');
+      throw new WdError('Item doesn\'t exist!');
     }
     this.size--;
 
@@ -146,13 +146,12 @@ export class TimeCollection<T extends TimeSpan> implements ICollection<T>, ITime
     return this.getDuration().toJSON();
   }
 
-  getDuration(): any {
+  getDuration(): m.Duration {
     let duration = 0;
-    const data = this.getAll();
-    data.forEach(item => {
-      duration = duration + item.duration();
+    this.getAll().forEach(item => {
+      duration += item.duration().asMilliseconds();
     });
-    return this.moment.duration(duration);
+    return m.duration(duration);
   }
 
   getFirst(): T {

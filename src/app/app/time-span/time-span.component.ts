@@ -1,15 +1,27 @@
 import { Component, Input } from '@angular/core';
-import { TimeSpan } from '../timespan';
+
+import { ITimeSpan } from 'src/app/core/domain/model/interfaces/timespan';
 
 @Component({
   selector: 'app-time-span',
-  templateUrl: './time-span.component.html',
-  styleUrls: ['./time-span.component.scss']
+  template: `
+    <mat-card class="span-card">
+      <div class="row">
+        <div class="col-md-6">
+          <span>{{start | dateString}} - {{end | dateString}}</span>
+        </div>
+        <div class="col-md-6 text-right">
+          <span>{{duration | timeSpan}}</span>
+        </div>
+      </div>
+    </mat-card>
+  `,
+  styles: ['']
 })
 export class TimeSpanComponent {
 
   @Input()
-  span: TimeSpan;
+  span: ITimeSpan;
 
   constructor() { }
 
@@ -21,7 +33,7 @@ export class TimeSpanComponent {
     return this.span.getEnd();
   }
 
-  get duration() {
+  get duration(): string {
     return this.span.durationAsString();
   }
 

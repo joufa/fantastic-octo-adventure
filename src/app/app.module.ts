@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +11,11 @@ import { MaterialModule } from './material';
 import { TimeInputComponent } from './app/time-input/time-input.component';
 import { PipesModule } from './pipes';
 import { ContextComponent } from './app/context/context.component';
+import { CoreModule } from './core/core.module';
+import { DataModule } from './data/data.module';
+import { TimeCollectionRepository } from './core/domain/repo/timecollection.repo';
+import { LocalStorageRepository } from './data/repo/timespan.repo';
+import { GlobalErrorHandler } from './error-handler/global.error-handler';
 
 @NgModule({
   declarations: [
@@ -22,11 +27,22 @@ import { ContextComponent } from './app/context/context.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
     ReactiveFormsModule,
+    MaterialModule,
+    CoreModule,
+    DataModule,
     PipesModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: TimeCollectionRepository,
+      useClass: LocalStorageRepository
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

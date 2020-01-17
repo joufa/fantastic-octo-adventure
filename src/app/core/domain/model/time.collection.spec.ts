@@ -1,5 +1,5 @@
-import { MomentTimeSpan } from '../../app/timespan';
-import { TimeCollection } from './timespan.collection';
+import { MomentTimeSpan } from './moment-timespan';
+import { TimeCollection } from './time.collection';
 
 const now = new Date();
 

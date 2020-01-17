@@ -12,7 +12,7 @@
         <mat-card-header>
           <mat-card-title-group>
             <mat-card-title>
-            <span>{{now | async | date}} </span>
+            <span>{{now$ | async | date}} </span>
             <span *ngIf="duration$ | async">({{duration$ | async | timeSpan}})</span>
             </mat-card-title>
 

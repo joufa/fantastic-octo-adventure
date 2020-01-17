@@ -1,4 +1,4 @@
-import { MomentTimeSpan } from './timespan';
+import { MomentTimeSpan } from './moment-timespan';
 
 describe('Moment timespan', () => {
 

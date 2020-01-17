@@ -1,4 +1,4 @@
-export interface ICollection<T> {
+export interface Collection<T> {
   getAll(): T[];
   insert(item: T): void;
   remove(item: T): void;
