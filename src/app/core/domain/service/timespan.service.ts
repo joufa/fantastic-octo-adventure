@@ -6,27 +6,32 @@ import { ITimeSpan, ITimeCollection } from '../model/interfaces/timespan';
 import { TimeCollectionRepository } from '../repo/timecollection.repo';
 import { MomentTimeSpan } from '../model/moment-timespan';
 import { WdError } from '../base/wd-error';
+import { ITimeApplicationService } from '../model/interfaces/time.application.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TimespanService {
+export class TimespanService implements ITimeApplicationService<ITimeSpan> {
 
   private collection: ITimeCollection;
 
   private pending = { pending: false } as PendingParams;
+
+  private hasSelection: boolean;
 
   private dataSubject = new BehaviorSubject<ITimeSpan[]>([]);
   private durationSubject = new BehaviorSubject<string>('');
   private dateSubject = new BehaviorSubject<Date>(null);
   private collectionSubject = new BehaviorSubject<ITimeCollection>(null);
   private pendingSubject = new BehaviorSubject<PendingParams>(this.pending);
+  private selectedSubject = new BehaviorSubject<ITimeSpan>(null);
 
   public data$ = this.dataSubject.asObservable();
   public duration$ = this.durationSubject.asObservable();
   public date$ = this.dateSubject.asObservable();
   public collection$ = this.collectionSubject.asObservable();
   public pending$ = this.pendingSubject.asObservable();
+  public selected$ = this.selectedSubject.asObservable();
 
   constructor(private repo: TimeCollectionRepository<ITimeCollection>) {
     this.init();
@@ -42,9 +47,15 @@ export class TimespanService {
     }
   }
 
-  removeSpan(t: ITimeSpan) {
+  removeSpan(t: ITimeSpan | number) {
     try {
-      this.collection.remove(t);
+      let item: ITimeSpan;
+      if (typeof(t) === 'number') {
+        item = this.collection.getAll()[t - 1];
+      } else {
+        item = t;
+      }
+      this.collection.remove(item);
       this.repo.saveCollection(this.collection);
       this.next();
     } catch (error) {
@@ -78,6 +89,25 @@ export class TimespanService {
     this.next();
   }
 
+  select(idx: number): void {
+    const span = this.getByIndex(idx);
+    if (!span) {
+      throw new WdError('Timespan not found!');
+    }
+    // if selected, unselect
+    if (this.hasSelection) {
+      this.selectedSubject.next(null);
+      this.hasSelection = false;
+      return;
+    }
+    this.selectedSubject.next(span);
+    this.hasSelection = true;
+  }
+
+  merge(start: number, end: number): void {
+    //
+  }
+
   private init() {
     const data: ITimeCollection = this.repo.getCollection();
 
@@ -107,5 +137,9 @@ export class TimespanService {
     const hours: string = (now.getHours() > 9) ? now.getHours().toString() : `0${now.getHours()}`;
     const minutes: string = (now.getMinutes() > 9) ? now.getMinutes().toString() : `0${now.getMinutes()}`;
     return `${hours}.${minutes}`;
+  }
+
+  private getByIndex(idx: number): ITimeSpan {
+    return this.collection.getAll()[idx - 1];
   }
 }

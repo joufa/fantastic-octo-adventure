@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { TimespanService } from '../core/domain/service/timespan.service';
-import { TimeInterpreterService } from './interpreter';
+import { TimeInterpreterService } from '../interpreter/interpreter';
 import { ITimeSpan } from '../core/domain/model/interfaces/timespan';
 
 @Component({
@@ -15,10 +15,10 @@ export class AppComponent implements OnInit {
   now$: Observable<Date>;
   data$: Observable<ITimeSpan[]>;
   duration$: Observable<string>;
+  selected$: Observable<ITimeSpan>;
 
   clearSubject: Subject<void> = new Subject<void>();
 
-  // TODO: Show notifications
   constructor(private service: TimespanService,
               private int: TimeInterpreterService) {
   }
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
     this.now$ = this.service.date$;
     this.data$ = this.service.data$;
     this.duration$ = this.service.duration$;
+    this.selected$ = this.service.selected$;
   }
 
   handleValue(text: string) {

@@ -11,14 +11,13 @@ export class GlobalErrorHandler implements ErrorHandler {
 
   handleError(error) {
     const ns = this.injector.get(NotificationService);
-    const message = error.message ? error.message : error.toString();
+    const message = error.message ? error.message : error;
 
     if (error instanceof WdError) {
       // Show notification and swallow
-      ns.default(error.message);
+      ns.default(message);
     } else {
       console.error(message);
-      console.error(error);
       ns.default('Oops! Something went wrong :(');
     }
 

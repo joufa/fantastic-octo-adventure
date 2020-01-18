@@ -2,6 +2,13 @@
 
 RUNDATA="`ss -tulw | grep 4200`"
 CONSOLES="`(cd src ; grep -r -l console.log)`"
+TODOS="`(cd src ; grep -r -l TODO)`"
+
+if [ "$TODOS" != "" ];
+then
+  echo "\e[93mWarning: TODO's found:"
+  echo "\e[35m$TODOS"
+fi
 
 if [ "$CONSOLES" != "" ];
 then

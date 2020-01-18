@@ -54,6 +54,10 @@ export class MomentTimeSpan implements ITimeSpan {
     return this.start.isSame(t.getStart()) && this.end.isSame(t.getEnd());
   }
 
+  isConnectedTo(t: ITimeSpan, fromStart: boolean): boolean {
+    throw new Error('Method not implemented.');
+  }
+
   private span(): m.Duration {
     const diff = this.end.diff(this.start);
     return m.duration(diff);

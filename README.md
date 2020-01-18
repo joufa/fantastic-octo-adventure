@@ -1,27 +1,47 @@
-# Workday
+# Workday-times
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.22.
+A time tracking webapp
 
-## Development server
+## CLI API
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+`HH{.}mm-HH{.}.mm`<br>
+Adds a new timespan if it doesn't conflict with existing timespans.
 
-## Code scaffolding
+`d HH{.}mm-HH{.}.mm`<br>
+Deletes a timespan.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+`s p HH{.}mm`<br>
+Starts timespan pending from given time.
 
-## Build
+`S`<br>
+Starts timespan pending from now.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+`E`<br>
+Ends timespan pending.
 
-## Running unit tests
+`d all`<br>
+Removes all timespans from current day.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+`s [idx] `<br>
+Selects a timespan at given index.
 
-## Running end-to-end tests
+`us [idx]`<br>
+Removes selection from given index.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+`s [idx] d`<br>
+Deletes a timespan at given index.
 
-## Further help
+`s [idx] start HH{.}mm`<br>
+Changes the start time of the selected timespan.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+`s [idx] end HH{.}mm`<br>
+Changes the end time of the selected timespan.
+
+`M [idx]-[idx] `<br>
+Merges the timespans at given indexes.
+
+`M all`<br>
+Merges all timespans that are connected.
+
+`app [minutes] `<br>
+Appends given minutes to the last timespan.

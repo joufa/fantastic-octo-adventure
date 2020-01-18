@@ -16,6 +16,8 @@ import { DataModule } from './data/data.module';
 import { TimeCollectionRepository } from './core/domain/repo/timecollection.repo';
 import { LocalStorageRepository } from './data/repo/timespan.repo';
 import { GlobalErrorHandler } from './error-handler/global.error-handler';
+import { TimeInterpreterService, Interpreter } from './interpreter';
+
 
 @NgModule({
   declarations: [
@@ -41,6 +43,10 @@ import { GlobalErrorHandler } from './error-handler/global.error-handler';
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
+    },
+    {
+      provide: Interpreter,
+      useClass: TimeInterpreterService
     }
   ],
   bootstrap: [AppComponent]
