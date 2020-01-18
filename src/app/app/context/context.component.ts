@@ -11,7 +11,7 @@ import { TimespanService } from '../../core/domain/service/timespan.service';
   template: `
     <mat-chip-list>
       <mat-chip>{{percentage}} %</mat-chip>
-      <mat-chip>{{breaks | timeSpan}} breaks</mat-chip>
+      <mat-chip>{{breaks | timeSpan}} {{'wd.context.breaks' | translate}}</mat-chip>
       <mat-chip *ngIf="(isPending$ | async).pending" color="accent">
         <mat-spinner [diameter]="20" style="margin-right: 5px"></mat-spinner>{{(isPending$ | async).start}} -
       </mat-chip>

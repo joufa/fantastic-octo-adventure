@@ -1,6 +1,7 @@
 import { ITimeSpan } from './interfaces/timespan';
 import * as m from 'moment';
 import { WdError } from '../base/wd-error';
+import { WdErrorCodes } from './error.codes';
 
 export class MomentTimeSpan implements ITimeSpan {
 
@@ -14,7 +15,7 @@ export class MomentTimeSpan implements ITimeSpan {
     this.end = m(end, this.format);
 
     if (this.end.isSameOrBefore(this.start)) {
-      throw new WdError('End time is same or before start time!');
+      throw new WdError(WdErrorCodes.ENDTIME_SAME_OR_BEFORE_STARTTIME);
     }
   }
 

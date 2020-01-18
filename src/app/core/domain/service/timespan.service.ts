@@ -7,6 +7,7 @@ import { TimeCollectionRepository } from '../repo/timecollection.repo';
 import { MomentTimeSpan } from '../model/moment-timespan';
 import { WdError } from '../base/wd-error';
 import { ITimeApplicationService } from '../model/interfaces/time.application.service';
+import { WdErrorCodes } from '../model/error.codes';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,6 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
   private collection: ITimeCollection;
 
   private pending = { pending: false } as PendingParams;
-
-  private hasSelection: boolean;
 
   private dataSubject = new BehaviorSubject<ITimeSpan[]>([]);
   private durationSubject = new BehaviorSubject<string>('');
@@ -43,7 +42,7 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
       this.repo.saveCollection(this.collection);
       this.next();
     } catch (error) {
-      throw new WdError('Cannot add new timespan!');
+      throw new WdError(WdErrorCodes.CANNOT_ADD_TIMESPAN);
     }
   }
 
@@ -56,10 +55,13 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
         item = t;
       }
       this.collection.remove(item);
+      if (this.selectedSubject.value.isSame(item)) {
+        this.selectedSubject.next(null);
+      }
       this.repo.saveCollection(this.collection);
       this.next();
     } catch (error) {
-      throw new WdError('Cannot remove timespan!');
+      throw new WdError(WdErrorCodes.CANNOT_REMOVE_TIMESPAN);
     }
   }
 
@@ -68,14 +70,14 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     !time ? this.pending = {pending: true, start: this.nowString()} as PendingParams
       : this.pending = {pending: true, start: time} as PendingParams;
     } else {
-      throw new WdError('Already pending!');
+      throw new WdError(WdErrorCodes.ALREADY_PENDING);
     }
     this.pendingSubject.next(this.pending);
   }
 
   endPending() {
     if (!this.pending.pending) {
-      throw new WdError('Cannot end pending while isn\'t even started!');
+      throw new WdError(WdErrorCodes.CANNOT_END_PENDING);
     }
     const ts = new MomentTimeSpan(this.pending.start, this.nowString());
     this.addSpan(ts);
@@ -92,16 +94,13 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
   select(idx: number): void {
     const span = this.getByIndex(idx);
     if (!span) {
-      throw new WdError('Timespan not found!');
-    }
-    // if selected, unselect
-    if (this.hasSelection) {
-      this.selectedSubject.next(null);
-      this.hasSelection = false;
-      return;
+      throw new WdError(WdErrorCodes.TIMESPAN_NOT_FOUND);
     }
     this.selectedSubject.next(span);
-    this.hasSelection = true;
+  }
+
+  unselect() {
+    this.selectedSubject.next(null);
   }
 
   merge(start: number, end: number): void {

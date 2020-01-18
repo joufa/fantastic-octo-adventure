@@ -60,10 +60,9 @@ export class TimeInterpreterService extends Interpreter {
       command.execute({firstIndex: idx});
       return false;
     }
-    if (this.isCommand(Types.UNSELECT_ONE, text)) {
-      const command = this.factory.create(Types.UNSELECT_ONE);
-      const idx = +text.substr(3, text.length);
-      command.execute({firstIndex: idx});
+    if (this.isCommand(Types.UNSELECT, text)) {
+      const command = this.factory.create(Types.UNSELECT);
+      command.execute();
       return true;
     }
     if (this.isCommand(Types.DELETE_ONE, text)) {

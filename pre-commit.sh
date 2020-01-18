@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 RUNDATA="`ss -tulw | grep 4200`"
 CONSOLES="`(cd src ; grep -r -l console.log)`"

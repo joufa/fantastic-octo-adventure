@@ -10,7 +10,7 @@ export const CommandExpressions = {
   [Types.START_PENDING]:           new RegExp('^S$'),
   [Types.END_PENDING]:             new RegExp('^E$'),
   [Types.DELETE_ALL]:              new RegExp('^d all$'),
-  [Types.SELECT_ONE]:              new RegExp('^s [0-100] $'),
-  [Types.UNSELECT_ONE]:            new RegExp('^us [0-100]$'),
-  [Types.DELETE_ONE]:              new RegExp('^s [0-100] d$')
+  [Types.SELECT_ONE]:              new RegExp('^s [1-9][0-9]? $'),
+  [Types.UNSELECT]:                new RegExp('^us [1-9][0-9]?$'),
+  [Types.DELETE_ONE]:              new RegExp('^s [1-9][0-9]? d$')
 };

@@ -17,7 +17,13 @@ import { TimeCollectionRepository } from './core/domain/repo/timecollection.repo
 import { LocalStorageRepository } from './data/repo/timespan.repo';
 import { GlobalErrorHandler } from './error-handler/global.error-handler';
 import { TimeInterpreterService, Interpreter } from './interpreter';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -30,6 +36,14 @@ import { TimeInterpreterService, Interpreter } from './interpreter';
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  }),
     MaterialModule,
     CoreModule,
     DataModule,

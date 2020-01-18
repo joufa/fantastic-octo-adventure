@@ -63,7 +63,7 @@ export class Select extends Command {
 }
 
 export class UnSelect extends Command {
-  execute(params: Params): void {
-    this.service.select(params.firstIndex);
+  execute(): void {
+    this.service.unselect();
   }
 }

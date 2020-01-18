@@ -9,7 +9,8 @@ import { AddTimeSpan,
          EndPending,
          DeleteAll,
          Select,
-         DeleteOne
+         DeleteOne,
+         UnSelect
         } from './commands';
 
 @Injectable({
@@ -47,8 +48,8 @@ export class CommandFactory {
       case (Types.SELECT_ONE): {
         return new Select(this.service);
       }
-      case (Types.UNSELECT_ONE): {
-        return new Select(this.service);
+      case (Types.UNSELECT): {
+        return new UnSelect(this.service);
       }
       case (Types.DELETE_ONE): {
         return new DeleteOne(this.service);

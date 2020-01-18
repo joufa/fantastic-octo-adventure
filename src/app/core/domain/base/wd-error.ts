@@ -1,6 +1,11 @@
+import { WdErrorCodes } from '../model/error.codes';
+
 export class WdError extends Error {
-  constructor(m: string) {
-    super(m);
+  code: WdErrorCodes;
+
+  constructor(code: WdErrorCodes) {
+    super();
+    this.code = code;
     Object.setPrototypeOf(this, WdError.prototype);
   }
 }

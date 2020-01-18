@@ -1,0 +1,13 @@
+{
+  "wd.app.title": "Workday App",
+  "wd.error.endtime-same-or-before-starttime": "End time is same or before start time!",
+  "wd.error.time-conflict": "Time conflict!",
+  "wd.error.item-does-not-exist": "Item doesn't exist!",
+  "wd.error.timespan-not-found": "Timespan not found!",
+  "wd.error.cannot-end-pending": "No pending!",
+  "wd.error.already-pending": "Already pending!",
+  "wd.error.cannot-remove-timespan": "Cannot remove timespan!",
+  "wd.error.cannot-add-timespan": "Cannot add timespan!",
+  "wd.error.unknown": "Oops! Something went wrong :(",
+  "wd.context.breaks": "breaks"
+}

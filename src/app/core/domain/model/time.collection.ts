@@ -2,6 +2,7 @@ import { Node } from './interfaces/node';
 import { ITimeSpan, ITimeCollection } from './interfaces/timespan';
 import * as m from 'moment';
 import { WdError } from '../base/wd-error';
+import { WdErrorCodes } from './error.codes';
 
 /**
  * TimeCollection represents one day.
@@ -15,7 +16,7 @@ export class TimeCollection<T extends ITimeSpan> implements ITimeCollection {
 
   constructor(day: Date) {
     if (!day) {
-      throw new WdError('Day cannot be null!');
+      throw new Error('Day cannot be null!');
     }
     this.initDay = day;
   }
@@ -56,7 +57,7 @@ export class TimeCollection<T extends ITimeSpan> implements ITimeCollection {
 
     // TODO: Refactor this
     if (this.conflicts(node)) {
-      throw new WdError('Time conflict!');
+      throw new WdError(WdErrorCodes.TIME_CONFLICT);
     }
 
     if (node.data.isBefore(this.head.data)) {
@@ -130,7 +131,7 @@ export class TimeCollection<T extends ITimeSpan> implements ITimeCollection {
 
     if (current === null) {
       // Not found in list
-      throw new WdError('Item doesn\'t exist!');
+      throw new WdError(WdErrorCodes.ITEM_DOES_NOT_EXIST);
     }
     this.size--;
 

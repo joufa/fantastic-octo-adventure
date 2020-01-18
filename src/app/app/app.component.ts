@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { TimespanService } from '../core/domain/service/timespan.service';
 import { TimeInterpreterService } from '../interpreter/interpreter';
 import { ITimeSpan } from '../core/domain/model/interfaces/timespan';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,9 @@ export class AppComponent implements OnInit {
   clearSubject: Subject<void> = new Subject<void>();
 
   constructor(private service: TimespanService,
-              private int: TimeInterpreterService) {
+              private int: TimeInterpreterService,
+              ts: TranslateService) {
+                ts.use('en');
   }
 
   ngOnInit(): void {
