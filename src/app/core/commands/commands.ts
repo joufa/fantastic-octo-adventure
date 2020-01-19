@@ -67,3 +67,9 @@ export class UnSelect extends Command {
     this.service.unselect();
   }
 }
+
+export class MergeAll extends Command {
+  execute(): void {
+    this.service.merge();
+  }
+}

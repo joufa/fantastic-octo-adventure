@@ -76,6 +76,11 @@ export class TimeInterpreterService extends Interpreter {
       command.execute();
       return true;
     }
+    if (this.isCommand(Types.MERGE_ALL, text)) {
+      const command = this.factory.create(Types.MERGE_ALL);
+      command.execute();
+      return true;
+    }
     return false;
   }
 

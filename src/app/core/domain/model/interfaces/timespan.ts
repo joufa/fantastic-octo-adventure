@@ -13,7 +13,7 @@ export interface ITimeSpan {
   isAfter(t: ITimeSpan): boolean;
   isBefore(t: ITimeSpan): boolean;
   isSame(t: ITimeSpan): boolean;
-  isConnectedTo(t: ITimeSpan, fromStart: boolean): boolean;
+  isConnectedTo(t: ITimeSpan, from: string): boolean;
 }
 
 export interface ITimeCollection extends Collection<ITimeSpan> {

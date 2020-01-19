@@ -41,4 +41,16 @@ describe('Moment timespan', () => {
     expect(first.isSame(third)).toBeFalsy();
   });
 
+  it('should handle connections', () => {
+    const first = new MomentTimeSpan('8.00', '11.00');
+    const second = new MomentTimeSpan('11.00', '12.00');
+    const third = new MomentTimeSpan('7.00', '8.00');
+    const fourth = new MomentTimeSpan('11.15', '12.00');
+
+    expect(first.isConnectedTo(third, 'start')).toBeTruthy();
+    expect(first.isConnectedTo(second, 'end')).toBeTruthy();
+    expect(first.isConnectedTo(fourth, 'end')).toBeFalsy();
+    expect(() => first.isConnectedTo(second, 'xxx')).toThrow();
+  });
+
 });

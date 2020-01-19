@@ -50,6 +50,8 @@ export class GlobalErrorHandler implements ErrorHandler {
         return 'wd.error.cannot-remove-timespan';
       case WdErrorCodes.CANNOT_ADD_TIMESPAN:
         return 'wd.error.cannot-add-timespan';
+      case WdErrorCodes.CANNOT_MERGE:
+        return 'wd.error.cannot-merge';
       default:
         return 'wd.error.default';
       }

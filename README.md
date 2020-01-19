@@ -31,17 +31,16 @@ Removes selection from given index.
 `s [idx] d`<br>
 Deletes a timespan at given index.
 
+`M all`<br>
+Merges all timespans that are connected.
+
+### TODO
+
 `s [idx] start HH{.}mm`<br>
 Changes the start time of the selected timespan.
 
 `s [idx] end HH{.}mm`<br>
 Changes the end time of the selected timespan.
-
-`M [idx]-[idx] `<br>
-Merges the timespans at given indexes.
-
-`M all`<br>
-Merges all timespans that are connected.
 
 `app [minutes] `<br>
 Appends given minutes to the last timespan.

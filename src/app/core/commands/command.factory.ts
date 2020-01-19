@@ -10,7 +10,8 @@ import { AddTimeSpan,
          DeleteAll,
          Select,
          DeleteOne,
-         UnSelect
+         UnSelect,
+         MergeAll
         } from './commands';
 
 @Injectable({
@@ -53,6 +54,9 @@ export class CommandFactory {
       }
       case (Types.DELETE_ONE): {
         return new DeleteOne(this.service);
+      }
+      case (Types.MERGE_ALL): {
+        return new MergeAll(this.service);
       }
       default:
         return null;

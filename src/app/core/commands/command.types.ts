@@ -7,5 +7,6 @@ export enum Types {
   DELETE_ALL,
   SELECT_ONE,
   DELETE_ONE,
-  UNSELECT
+  UNSELECT,
+  MERGE_ALL
 }

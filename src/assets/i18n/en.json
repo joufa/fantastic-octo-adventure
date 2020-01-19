@@ -8,6 +8,7 @@
   "wd.error.already-pending": "Already pending!",
   "wd.error.cannot-remove-timespan": "Cannot remove timespan!",
   "wd.error.cannot-add-timespan": "Cannot add timespan!",
-  "wd.error.unknown": "Oops! Something went wrong :(",
+  "wd.error.cannot-merge": "Cannot merge!",
+  "wd.error.default": "Oops! Something went wrong :(",
   "wd.context.breaks": "breaks"
 }

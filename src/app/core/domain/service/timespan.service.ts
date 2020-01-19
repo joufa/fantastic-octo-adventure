@@ -17,7 +17,7 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
   private collection: ITimeCollection;
 
   private pending = { pending: false } as PendingParams;
-
+  // TODO: Extract to object
   private dataSubject = new BehaviorSubject<ITimeSpan[]>([]);
   private durationSubject = new BehaviorSubject<string>('');
   private dateSubject = new BehaviorSubject<Date>(null);
@@ -103,8 +103,43 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     this.selectedSubject.next(null);
   }
 
-  merge(start: number, end: number): void {
-    //
+  merge(): void {
+    if (this.collection.isEmpty() || this.collection.length() === 1) {
+      return;
+    }
+    this.mergeAll();
+  }
+
+  private mergeFlush(c: ITimeCollection) {
+    this.collection = Object.create(c);
+    this.repo.saveCollection(this.collection);
+    this.next();
+  }
+
+  private mergeAll() {
+    let tempCollection = Object.create(this.collection);
+    let data = Object.create(tempCollection.getAll());
+    let size = data.length;
+
+    for (let i = 0; i < size; i++) {
+      const item = data[i];
+      const next = data[i + 1];
+      if (!next) {
+        break;
+      }
+      if (item.isConnectedTo(next, 'end')) {
+        const span = new MomentTimeSpan(item.getStart().format('HH.mm'), next.getEnd().format('HH.mm'));
+        tempCollection.remove(item);
+        tempCollection.remove(next);
+        tempCollection.insert(span);
+
+        i = 0;
+        tempCollection = Object.create(tempCollection);
+        size = tempCollection.length();
+        data = Object.create(tempCollection.getAll());
+      }
+    }
+    this.mergeFlush(tempCollection);
   }
 
   private init() {

@@ -7,6 +7,6 @@ export interface ITimeApplicationService<T extends ITimeSpan> {
   endPending(): void;
   clear(): void;
   select(idx: number): void;
-  unselect();
-  merge(start: number, end: number): void;
+  unselect(): void;
+  merge(): void;
 }
