@@ -9,6 +9,5 @@
   "wd.error.cannot-remove-timespan": "Cannot remove timespan!",
   "wd.error.cannot-add-timespan": "Cannot add timespan!",
   "wd.error.cannot-merge": "Cannot merge!",
-  "wd.error.default": "Oops! Something went wrong :(",
-  "wd.context.breaks": "breaks"
+  "wd.error.default": "Oops! Something went wrong :("
 }

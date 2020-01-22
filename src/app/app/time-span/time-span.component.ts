@@ -5,7 +5,7 @@ import { ITimeSpan } from 'src/app/core/domain/model/interfaces/timespan';
 @Component({
   selector: 'app-time-span',
   template: `
-    <mat-card class="span-card" [style.border]="selected ? '2px dotted red' : 'none'">
+    <mat-card class="span-card" [style.border]="selected === span ? '2px dotted red' : 'none'">
       <div class="row">
         <div class="col-md-6">
           <span>{{start | dateString}} - {{end | dateString}}</span>

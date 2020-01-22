@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TimeCollection } from '../model/time.collection';
-import { PendingParams } from './pending.params';
 import { BehaviorSubject } from 'rxjs';
 import { ITimeSpan, ITimeCollection } from '../model/interfaces/timespan';
 import { TimeCollectionRepository } from '../repo/timecollection.repo';
@@ -8,6 +7,10 @@ import { MomentTimeSpan } from '../model/moment-timespan';
 import { WdError } from '../base/wd-error';
 import { ITimeApplicationService } from '../model/interfaces/time.application.service';
 import { WdErrorCodes } from '../model/error.codes';
+import { TimeData } from './time-data';
+import { Merger } from '../model/merger';
+import { TimeUtils } from './time.utils';
+
 
 @Injectable({
   providedIn: 'root',
@@ -15,32 +18,24 @@ import { WdErrorCodes } from '../model/error.codes';
 export class TimespanService implements ITimeApplicationService<ITimeSpan> {
 
   private collection: ITimeCollection;
+  private expectedDuration = 27000;
+  private data: TimeData;
 
-  private pending = { pending: false } as PendingParams;
-  // TODO: Extract to object
-  private dataSubject = new BehaviorSubject<ITimeSpan[]>([]);
-  private durationSubject = new BehaviorSubject<string>('');
-  private dateSubject = new BehaviorSubject<Date>(null);
-  private collectionSubject = new BehaviorSubject<ITimeCollection>(null);
-  private pendingSubject = new BehaviorSubject<PendingParams>(this.pending);
-  private selectedSubject = new BehaviorSubject<ITimeSpan>(null);
-
+  private dataSubject = new BehaviorSubject<TimeData>(null);
   public data$ = this.dataSubject.asObservable();
-  public duration$ = this.durationSubject.asObservable();
-  public date$ = this.dateSubject.asObservable();
-  public collection$ = this.collectionSubject.asObservable();
-  public pending$ = this.pendingSubject.asObservable();
-  public selected$ = this.selectedSubject.asObservable();
+
 
   constructor(private repo: TimeCollectionRepository<ITimeCollection>) {
+    this.data = new TimeData();
     this.init();
   }
 
   addSpan(t: ITimeSpan) {
     try {
       this.collection.insert(t);
-      this.repo.saveCollection(this.collection);
-      this.next();
+      this.save();
+      this.flushCollection();
+      this.emit();
     } catch (error) {
       throw new WdError(WdErrorCodes.CANNOT_ADD_TIMESPAN);
     }
@@ -55,40 +50,49 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
         item = t;
       }
       this.collection.remove(item);
-      if (this.selectedSubject.value.isSame(item)) {
-        this.selectedSubject.next(null);
+      if (this.data.selected.isSame(item)) {
+        this.data.selected = null;
       }
-      this.repo.saveCollection(this.collection);
-      this.next();
+      this.save();
+      this.flushCollection();
+      this.emit();
     } catch (error) {
       throw new WdError(WdErrorCodes.CANNOT_REMOVE_TIMESPAN);
     }
   }
 
   startPending(time: string) {
-    if (!this.pending.pending) {
-    !time ? this.pending = {pending: true, start: this.nowString()} as PendingParams
-      : this.pending = {pending: true, start: time} as PendingParams;
+    if (!this.data.pending) {
+      if (!time) {
+        this.data.pending = true;
+        this.data.pendingTime = TimeUtils.nowString();
+      } else {
+        this.data.pending = true;
+        this.data.pendingTime = time;
+      }
+      this.emit();
     } else {
       throw new WdError(WdErrorCodes.ALREADY_PENDING);
     }
-    this.pendingSubject.next(this.pending);
   }
 
   endPending() {
-    if (!this.pending.pending) {
+    if (!this.data.pending) {
       throw new WdError(WdErrorCodes.CANNOT_END_PENDING);
     }
-    const ts = new MomentTimeSpan(this.pending.start, this.nowString());
+    const ts = new MomentTimeSpan(this.data.pendingTime, TimeUtils.nowString());
     this.addSpan(ts);
-    this.pending = {pending: false} as PendingParams;
-    this.pendingSubject.next(this.pending);
+    this.data.pending = false;
+    this.data.pendingTime = null;
+    this.flushCollection();
+    this.emit();
   }
 
   clear() {
     this.collection = new TimeCollection<MomentTimeSpan>(new Date());
     this.repo.clear();
-    this.next();
+    this.flushCollection();
+    this.emit();
   }
 
   select(idx: number): void {
@@ -96,84 +100,73 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     if (!span) {
       throw new WdError(WdErrorCodes.TIMESPAN_NOT_FOUND);
     }
-    this.selectedSubject.next(span);
+    this.data.selected = span;
+    this.emit();
   }
 
   unselect() {
-    this.selectedSubject.next(null);
+    this.data.selected = null;
+    this.emit();
   }
 
   merge(): void {
-    if (this.collection.isEmpty() || this.collection.length() === 1) {
-      return;
-    }
-    this.mergeAll();
+    const merger = new Merger(this.collection);
+    this.collection = merger.merge();
+    this.save();
+    this.flushCollection();
+    this.emit();
   }
 
-  private mergeFlush(c: ITimeCollection) {
-    this.collection = Object.create(c);
-    this.repo.saveCollection(this.collection);
-    this.next();
+  private percentage(): string {
+    const collectionDuration: number = this.collection.getDuration().asSeconds();
+    const percentage = (collectionDuration * 100) / this.expectedDuration;
+    return Math.floor(percentage) as unknown as string;
   }
 
-  private mergeAll() {
-    let tempCollection = Object.create(this.collection);
-    let data = Object.create(tempCollection.getAll());
-    let size = data.length;
-
-    for (let i = 0; i < size; i++) {
-      const item = data[i];
-      const next = data[i + 1];
-      if (!next) {
-        break;
-      }
-      if (item.isConnectedTo(next, 'end')) {
-        const span = new MomentTimeSpan(item.getStart().format('HH.mm'), next.getEnd().format('HH.mm'));
-        tempCollection.remove(item);
-        tempCollection.remove(next);
-        tempCollection.insert(span);
-
-        i = 0;
-        tempCollection = Object.create(tempCollection);
-        size = tempCollection.length();
-        data = Object.create(tempCollection.getAll());
-      }
-    }
-    this.mergeFlush(tempCollection);
+  private flushCollection() {
+    this.data.data = this.collection.getAll();
+    this.data.breakDuration = this.breakDuration();
+    this.data.percentage = this.percentage();
+    this.data.duration = this.collection.getDurationAsString();
   }
 
   private init() {
     const data: ITimeCollection = this.repo.getCollection();
 
-    if (!data || !this.isSameDay(data.day(), new Date())) {
+    if (!data || !TimeUtils.isSameDay(data.day(), new Date())) {
       // new instance
       this.collection = new TimeCollection<MomentTimeSpan>(new Date());
       this.repo.saveCollection(this.collection);
     } else {
       this.collection = data;
     }
-    this.next();
-    this.dateSubject.next(this.collection.day());
+    this.data.date = this.collection.day();
+    this.flushCollection();
+    this.emit();
   }
 
-  private next(): void {
-    this.dataSubject.next(this.collection.getAll());
-    this.durationSubject.next(this.collection.getDurationAsString());
-    this.collectionSubject.next(this.collection);
+  private emit(): void {
+    this.data = Object.create(this.data.flush());
+    this.dataSubject.next(this.data.flush());
   }
 
-  private isSameDay(first: Date, second: Date): boolean {
-    return new Date(first).getDay() === new Date(second).getDay();
-  }
-
-  private nowString() {
-    const now: Date = new Date();
-    const hours: string = (now.getHours() > 9) ? now.getHours().toString() : `0${now.getHours()}`;
-    const minutes: string = (now.getMinutes() > 9) ? now.getMinutes().toString() : `0${now.getMinutes()}`;
-    return `${hours}.${minutes}`;
+  private breakDuration(): string {
+    if (this.collection.isEmpty()) {
+      return 'P0D';
+    }
+    const start: string = this.collection.getFirst().getStart().format('HH.mm');
+    const end: string = this.collection.getLast().getEnd().format('HH.mm');
+    const ts = new MomentTimeSpan(start, end);
+    const breaks = ts.duration().subtract(this.collection.getDuration());
+    return breaks.toJSON();
   }
 
   private getByIndex(idx: number): ITimeSpan {
     return this.collection.getAll()[idx - 1];
   }
+
+  private save() {
+    this.repo.saveCollection(this.collection);
+  }
+
 }

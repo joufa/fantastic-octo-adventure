@@ -19,13 +19,16 @@ describe('Moment timespan', () => {
   });
 
   it ('should conflict with timespans', () => {
-    const first = new MomentTimeSpan('8.00', '11.00');
+    const dep = new MomentTimeSpan('07.30', '08.00');
+    const first = new MomentTimeSpan('08.00', '11.00');
     const second = new MomentTimeSpan('7.30', '9.00');
     const third = new MomentTimeSpan('11.15', '12.00');
 
     const fourth = new MomentTimeSpan('8.30', '9.00');
     const fifth = new MomentTimeSpan('11.00', '12.00');
 
+    expect(first.conflicts(dep)).toBeFalsy();
+    expect(first.conflicts(fifth)).toBeFalsy();
     expect(first.conflicts(second)).toBeTruthy();
     expect(first.conflicts(third)).toBeFalsy();
 

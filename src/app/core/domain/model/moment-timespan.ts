@@ -35,20 +35,26 @@ export class MomentTimeSpan implements ITimeSpan {
   }
 
   isAfter(t: ITimeSpan): boolean {
-    return this.end.isAfter(t.getStart());
+    return this.start.isSame(t.getEnd()) || this.start.isAfter(t.getEnd());
   }
   isBefore(t: ITimeSpan): boolean {
-    return this.end.isBefore(t.getStart());
+    return this.end.isSame(t.getStart()) || this.end.isBefore(t.getEnd());
   }
 
   conflicts(t: ITimeSpan): boolean {
-    if (this.start.isAfter(t.getEnd())) {
+    if (t.getStart().isSame(this.end)) {
       return false;
     }
-    if (t.getStart().isBefore(this.end) || t.getStart().isBefore(this.end)) {
-      return true;
+    if (t.getEnd().isSame(this.start)) {
+      return false;
     }
-    return false;
+    if (t.getStart().isAfter(this.end)) {
+      return false;
+    }
+    if (t.getEnd().isBefore(this.start)) {
+     return false;
+    }
+    return true;
   }
 
   isSame(t: ITimeSpan): boolean {
@@ -59,13 +65,17 @@ export class MomentTimeSpan implements ITimeSpan {
     if (from !== 'start' && from !== 'end') {
       throw new Error('Invalid parameters');
     }
+    if (!t) {
+      return false;
+    }
+
     const fromStart = from === 'start' ? true : false;
 
     if (fromStart) {
-      const diff = t.getEnd().diff(this.start);
+      const diff = this.start.diff(t.getEnd());
       return diff === 0;
     } else {
-      const diff = t.getStart().diff(this.end);
+      const diff = this.end.diff(t.getStart());
       return diff === 0;
     }
   }
