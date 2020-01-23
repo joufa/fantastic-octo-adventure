@@ -53,3 +53,5 @@ Thumbs.db
 ### Firebase Patch ###
 .runtimeconfig.json
 .firebase/
+
+git-version.json

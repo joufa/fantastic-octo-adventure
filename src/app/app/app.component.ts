@@ -4,6 +4,8 @@ import { Observable, Subject } from 'rxjs';
 import { TimeData } from '../core/domain/service/time-data';
 import { TimespanService } from '../core/domain/service/timespan.service';
 import { TimeInterpreterService } from '../interpreter/interpreter';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-root',
@@ -23,6 +25,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.ts.use('en');
     this.data$ = this.service.data$;
+  }
+
+  get version() {
+    return environment.version;
   }
 
   handleValue(text: string) {

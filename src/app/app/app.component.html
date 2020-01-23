@@ -1,7 +1,15 @@
 <mat-toolbar color="primary">
-  <span id="title">
-    {{ 'wd.app.title' | translate}}
-  </span>
+  <mat-toolbar-row>
+    <span id="title">
+      {{ 'wd.app.title' | translate}}
+    </span>
+    <span class="fill-remaining-space"></span>
+    <span class="version">{{ version }}</span>
+    <button mat-icon-button>
+      <mat-icon>settings_applications</mat-icon>
+    </button>
+  </mat-toolbar-row>
+
 </mat-toolbar>
 <div class="container">
   <app-time-input [clear]="clearSubject.asObservable()" (text)="handleValue($event)"></app-time-input>
