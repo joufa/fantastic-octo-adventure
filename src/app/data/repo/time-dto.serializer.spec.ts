@@ -1,7 +1,7 @@
 
 import { DtoMapper } from './time-dto.serializer';
-import { TimeCollection } from '../../core/domain/model/time.collection';
-import { MomentTimeSpan } from '../../core/domain/model/moment-timespan';
+import { TimeCollection } from '../../domain/model/time.collection';
+import { MomentTimeSpan } from '../../domain/model/moment-timespan';
 
 const now = new Date();
 

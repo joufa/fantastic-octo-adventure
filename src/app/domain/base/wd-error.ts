@@ -1,4 +1,4 @@
-import { WdErrorCodes } from '../model/error.codes';
+import { WdErrorCodes } from './error.codes';
 
 export class WdError extends Error {
   code: WdErrorCodes;

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { TimeCollection } from '../model/time.collection';
+import { TimeCollection } from '../../../domain/model/time.collection';
 import { BehaviorSubject } from 'rxjs';
-import { ITimeSpan, ITimeCollection } from '../model/interfaces/timespan';
-import { TimeCollectionRepository } from '../repo/timecollection.repo';
-import { MomentTimeSpan } from '../model/moment-timespan';
-import { WdError } from '../base/wd-error';
-import { ITimeApplicationService } from '../model/interfaces/time.application.service';
-import { WdErrorCodes } from '../model/error.codes';
+import { ITimeSpan, ITimeCollection } from '../../../domain/model/interface/timespan';
+import { TimeCollectionRepository } from '../../../domain/repository/timecollection.repo';
+import { MomentTimeSpan } from '../../../domain/model/moment-timespan';
+import { WdError } from '../../../domain/base/wd-error';
+import { ITimeApplicationService } from '../../../domain/model/interface/time-application.service.interface';
+import { WdErrorCodes } from '../../../domain/base/error.codes';
 import { TimeData } from './time-data';
-import { Merger } from '../model/merger';
+import { Merger } from '../../../domain/model/merger';
 import { TimeUtils } from './time.utils';
 
 

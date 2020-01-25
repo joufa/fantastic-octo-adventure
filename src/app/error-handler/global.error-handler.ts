@@ -1,7 +1,7 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
-import { WdError } from '../core/domain/base/wd-error';
+import { WdError } from '../domain/base/wd-error';
 import { NotificationService } from '../notifications/notification.service';
-import { WdErrorCodes } from '../core/domain/model/error.codes';
+import { WdErrorCodes } from '../domain/base/error.codes';
 import { TranslateService } from '@ngx-translate/core';
 
 

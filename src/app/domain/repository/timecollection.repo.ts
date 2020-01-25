@@ -1,4 +1,4 @@
-import { ITimeCollection } from '../model/interfaces/timespan';
+import { ITimeCollection } from '../model/interface/timespan';
 
 export abstract class TimeCollectionRepository<T extends ITimeCollection> {
   abstract saveCollection(collection: T): void;

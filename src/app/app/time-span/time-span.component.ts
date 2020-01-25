@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { ITimeSpan } from 'src/app/core/domain/model/interfaces/timespan';
+import { ITimeSpan } from 'src/app/domain/model/interface/timespan';
 
 @Component({
   selector: 'app-time-span',

@@ -1,4 +1,4 @@
-import { ITimeSpan } from '../model/interfaces/timespan';
+import { ITimeSpan } from '../../../domain/model/interface/timespan';
 
 export interface ITimeData {
   flush(): TimeData;

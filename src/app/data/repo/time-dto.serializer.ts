@@ -1,8 +1,8 @@
 import { TimeSpanDto, TimeCollectionDto } from './repo.model';
-import { Mapper } from '../../core/domain/base/mapper';
-import { ITimeCollection, ITimeSpan } from '../../core/domain/model/interfaces/timespan';
-import { MomentTimeSpan } from '../../core/domain/model/moment-timespan';
-import { TimeCollection } from '../../core/domain/model/time.collection';
+import { Mapper } from '../../domain/base/mapper';
+import { ITimeCollection, ITimeSpan } from '../../domain/model/interface/timespan';
+import { MomentTimeSpan } from '../../domain/model/moment-timespan';
+import { TimeCollection } from '../../domain/model/time.collection';
 
 export class DtoMapper implements Mapper<ITimeCollection, TimeCollectionDto> {
 

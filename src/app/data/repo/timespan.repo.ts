@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { ITimeCollection } from '../../core/domain/model/interfaces/timespan';
-import { TimeCollectionRepository } from '../../core/domain/repo/timecollection.repo';
+import { ITimeCollection } from '../../domain/model/interface/timespan';
+import { TimeCollectionRepository } from '../../domain/repository/timecollection.repo';
 import { TimeCollectionDto } from './repo.model';
 import { DtoMapper } from './time-dto.serializer';
 

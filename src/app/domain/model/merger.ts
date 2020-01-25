@@ -1,4 +1,4 @@
-import { ITimeCollection } from './interfaces/timespan';
+import { ITimeCollection } from './interface/timespan';
 import { MomentTimeSpan } from './moment-timespan';
 
 export class Merger {

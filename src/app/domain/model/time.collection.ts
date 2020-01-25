@@ -1,8 +1,8 @@
-import { Node } from './interfaces/node';
-import { ITimeSpan, ITimeCollection } from './interfaces/timespan';
+import { Node } from './interface/node';
+import { ITimeSpan, ITimeCollection } from './interface/timespan';
 import * as m from 'moment';
 import { WdError } from '../base/wd-error';
-import { WdErrorCodes } from './error.codes';
+import { WdErrorCodes } from '../base/error.codes';
 
 /**
  * TimeCollection represents one day.

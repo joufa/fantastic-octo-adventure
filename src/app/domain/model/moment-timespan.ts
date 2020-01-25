@@ -1,7 +1,7 @@
-import { ITimeSpan } from './interfaces/timespan';
+import { ITimeSpan } from './interface/timespan';
 import * as m from 'moment';
 import { WdError } from '../base/wd-error';
-import { WdErrorCodes } from './error.codes';
+import { WdErrorCodes } from '../base/error.codes';
 
 export class MomentTimeSpan implements ITimeSpan {
 

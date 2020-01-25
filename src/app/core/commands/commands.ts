@@ -1,9 +1,9 @@
 import { Inject } from '@angular/core';
 
 import { TimespanService } from '../domain/service/timespan.service';
-import { ITimeApplicationService } from '../domain/model/interfaces/time.application.service';
-import { ITimeSpan } from '../domain/model/interfaces/timespan';
-import { MomentTimeSpan } from '../domain/model/moment-timespan';
+import { ITimeApplicationService } from '../../domain/model/interface/time-application.service.interface';
+import { ITimeSpan } from '../../domain/model/interface/timespan';
+import { MomentTimeSpan } from '../../domain/model/moment-timespan';
 import { Params } from './params.interface';
 
 
