@@ -11,7 +11,8 @@ import { AddTimeSpan,
          Select,
          DeleteOne,
          UnSelect,
-         MergeAll
+         MergeAll,
+         Interval
         } from './commands';
 
 @Injectable({
@@ -57,6 +58,9 @@ export class CommandFactory {
       }
       case (Types.MERGE_ALL): {
         return new MergeAll(this.service);
+      }
+      case (Types.INTERVAL): {
+        return new Interval(this.service);
       }
       default:
         return null;

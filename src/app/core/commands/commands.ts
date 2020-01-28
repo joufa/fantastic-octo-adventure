@@ -73,3 +73,8 @@ export class MergeAll extends Command {
     this.service.merge();
   }
 }
+export class Interval extends Command {
+  execute(): void {
+    this.service.interval();
+  }
+}

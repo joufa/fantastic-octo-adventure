@@ -14,6 +14,7 @@ export class TimeData implements ITimeData {
   selected: ITimeSpan;
   breakDuration: string;
   percentage: string;
+  etd: Date;
 
   flush(): TimeData {
     const td = new TimeData();
@@ -25,6 +26,7 @@ export class TimeData implements ITimeData {
     td.selected = this.selected;
     td.breakDuration = this.breakDuration;
     td.percentage = this.percentage;
+    td.etd = this.etd;
     return td;
   }
 }

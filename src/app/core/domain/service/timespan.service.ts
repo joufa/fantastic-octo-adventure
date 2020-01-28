@@ -10,7 +10,7 @@ import { WdErrorCodes } from '../model/error.codes';
 import { TimeData } from './time-data';
 import { Merger } from '../model/merger';
 import { TimeUtils } from './time.utils';
-
+import * as m from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -88,6 +88,16 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     this.emit();
   }
 
+  interval() {
+    if (this.data.pending) {
+      this.endPending();
+      this.startPending(null);
+      this.merge();
+      return;
+    }
+    throw new Error();
+  }
+
   clear() {
     this.collection = new TimeCollection<MomentTimeSpan>(new Date());
     this.repo.clear();
@@ -128,6 +138,19 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     this.data.breakDuration = this.breakDuration();
     this.data.percentage = this.percentage();
     this.data.duration = this.collection.getDurationAsString();
+    this.flushEtd();
+  }
+
+  flushEtd() {
+    if (this.collection.isEmpty()) {
+      this.data.etd = null;
+    } else {
+      this.data.etd = TimeUtils.getETD(
+        this.expectedDuration,
+        m(this.collection.getLast().getEnd()).toDate(),
+        this.collection.getDuration().asSeconds()
+        );
+    }
   }
 
   private init() {

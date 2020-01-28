@@ -9,4 +9,5 @@ export interface ITimeApplicationService<T extends ITimeSpan> {
   select(idx: number): void;
   unselect(): void;
   merge(): void;
+  interval(): void;
 }

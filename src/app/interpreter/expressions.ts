@@ -13,5 +13,6 @@ export const CommandExpressions = {
   [Types.SELECT_ONE]:              new RegExp('^s [1-9][0-9]? $'),
   [Types.UNSELECT]:                new RegExp('^us [1-9][0-9]?$'),
   [Types.DELETE_ONE]:              new RegExp('^s [1-9][0-9]? d$'),
-  [Types.MERGE_ALL]:               new RegExp('^M all$')
+  [Types.MERGE_ALL]:               new RegExp('^M all$'),
+  [Types.INTERVAL]:                new RegExp('^x$')
 };

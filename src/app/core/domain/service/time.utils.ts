@@ -1,3 +1,5 @@
+import * as m from 'moment';
+
 export class TimeUtils {
 
   static nowString() {
@@ -9,5 +11,13 @@ export class TimeUtils {
 
   static isSameDay(first: Date, second: Date): boolean {
     return new Date(first).getDay() === new Date(second).getDay();
+  }
+
+  static getETD(expected: number, latestEnd: Date, duration: number): Date {
+    const left = expected - duration;
+    const dateString: string = latestEnd.getHours() + '.' + latestEnd.getMinutes();
+    const momentDate = m(dateString, 'HH.mm');
+    const result = momentDate.add(left, 'seconds');
+    return result.toDate();
   }
 }

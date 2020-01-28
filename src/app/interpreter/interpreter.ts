@@ -81,6 +81,11 @@ export class TimeInterpreterService extends Interpreter {
       command.execute();
       return true;
     }
+    if (this.isCommand(Types.INTERVAL, text)) {
+      const command = this.factory.create(Types.INTERVAL);
+      command.execute();
+      return true;
+    }
     return false;
   }
 

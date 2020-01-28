@@ -22,6 +22,7 @@
             <mat-card-title>
             <span>{{(data$ | async).date | date}} </span>
             <span *ngIf="(data$ | async).duration">({{(data$ | async).duration | timeSpan}})</span>
+            <span *ngIf="(data$ | async).etd"> ETD: {{(data$ | async).etd | etdTime}}</span>
             </mat-card-title>
 
             <mat-card-title>
