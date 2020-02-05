@@ -138,6 +138,7 @@ export class TimespanService implements ITimeApplicationService<ITimeSpan> {
     this.data.breakDuration = this.breakDuration();
     this.data.percentage = this.percentage();
     this.data.duration = this.collection.getDurationAsString();
+    this.data.decimalDuration = TimeUtils.durationToDecimal(this.collection.getDuration());
     this.flushEtd();
   }
 

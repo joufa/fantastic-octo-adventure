@@ -8,6 +8,10 @@ export class EtdTimePipe implements PipeTransform {
 
   transform(value: Date): string {
     const md = m(value);
-    return `${md.hours()}.${md.minutes()}`;
+    let realMinutes = md.minutes().toString();
+    if (md.minutes() < 10) {
+      realMinutes = `0${md.minutes().toString()}`;
+    }
+    return `${md.hours()}.${realMinutes}`;
   }
 }

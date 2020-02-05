@@ -22,14 +22,15 @@
             <mat-card-title>
             <span>{{(data$ | async).date | date}} </span>
             <span *ngIf="(data$ | async).duration">({{(data$ | async).duration | timeSpan}})</span>
-            <span *ngIf="(data$ | async).etd"> ETD: {{(data$ | async).etd | etdTime}}</span>
             </mat-card-title>
 
             <mat-card-title>
              <app-context [percentage]="(data$ | async).percentage"
                           [breaks]="(data$ | async).breakDuration"
                           [pending]="(data$ | async).pending"
-                          [pendingText]="(data$ | async).pendingTime">
+                          [pendingText]="(data$ | async).pendingTime"
+                          [etd]="(data$ | async).etd"
+                          [decimalDuration]="(data$ | async).decimalDuration">
               </app-context>
             </mat-card-title>
           </mat-card-title-group>

@@ -6,15 +6,34 @@ export interface ITimeData {
 
 export class TimeData implements ITimeData {
 
+  /**
+   * Timespan objects
+   */
   data: ITimeSpan[];
+  /**
+   * Total worktime duration
+   */
   duration: string;
+  /**
+   * Current date
+   */
   date: Date;
   pending: boolean;
   pendingTime: string;
   selected: ITimeSpan;
+  /**
+   * Total duration of breks
+   */
   breakDuration: string;
   percentage: string;
+  /**
+   * Estimed time of departure
+   */
   etd: Date;
+  /**
+   * Duration as decimal string
+   */
+  decimalDuration: string;
 
   flush(): TimeData {
     const td = new TimeData();
@@ -27,6 +46,7 @@ export class TimeData implements ITimeData {
     td.breakDuration = this.breakDuration;
     td.percentage = this.percentage;
     td.etd = this.etd;
+    td.decimalDuration = this.decimalDuration;
     return td;
   }
 }
